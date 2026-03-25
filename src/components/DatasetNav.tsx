@@ -8,7 +8,7 @@ interface Props {
 
 export function DatasetNav({ filename, status }: Props) {
   return (
-    <nav className="flex items-center justify-between gap-6 px-8 py-4 border-b border-(--border-dim)">
+    <nav className="flex items-center justify-between gap-6 px-8 py-4 border-b border-(--border-dim) mb-8">
 
       {/* Back — tertiary: link-style, no background */}
       <button className="flex items-center gap-1.5 font-(--font-mono) text-[12px] text-(--text-dim) hover:text-(--text-secondary) transition-colors duration-150 cursor-pointer bg-transparent border-0 p-0 shrink-0">

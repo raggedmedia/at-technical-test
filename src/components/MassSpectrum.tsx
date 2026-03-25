@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { StepLabel } from './StepLabel'
 import {
   BarChart,
   Bar,
@@ -77,7 +78,9 @@ export function MassSpectrum({ spectrum, totalAtoms }: Props) {
     scale === 'log' ? `10^${v.toFixed(0)}` : formatCount(v)
 
   return (
-    <section className="card p-6 flex flex-col gap-5">
+    <section className="flex flex-col gap-3">
+      <StepLabel n="02" title="Mass Spectrum" />
+      <div className="card p-6 flex flex-col gap-5">
 
       {/* Header row */}
       <div className="flex items-start justify-between gap-4">
@@ -209,6 +212,7 @@ export function MassSpectrum({ spectrum, totalAtoms }: Props) {
           : 'Linear scale — shows true relative abundance. Minor peaks may not be visible.'}
       </p>
 
+      </div>
     </section>
   )
 }

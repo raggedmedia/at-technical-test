@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import type { AtomPoint } from '../hooks/useAptData'
+import { StepLabel } from './StepLabel'
 
 interface Props {
   atoms: AtomPoint[]
@@ -69,7 +70,9 @@ export function PointCloud3D({ atoms, loading }: Props) {
   }, [atoms])
 
   return (
-    <div className="card flex flex-col gap-4 p-5">
+    <section className="flex flex-col gap-3">
+      <StepLabel n="03" title="Reconstruction Geometry" />
+      <div className="card flex flex-col gap-4 p-5">
       <div className="h-[520px] rounded-lg overflow-hidden">
         {loading ? (
           <div className="w-full h-full animate-pulse rounded-lg bg-(--bg-card-hi)" />
@@ -108,6 +111,7 @@ export function PointCloud3D({ atoms, loading }: Props) {
       <p className="font-(--font-mono) text-[11px] text-(--text-dim)">
         Left-drag to orbit · Scroll to zoom · Right-drag to pan — Z axis = needle depth (nm)
       </p>
-    </div>
+      </div>
+    </section>
   )
 }

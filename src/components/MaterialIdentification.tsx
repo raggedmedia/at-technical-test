@@ -1,5 +1,6 @@
 import type React from 'react'
 import type { SpectrumBin } from '../fixtures/aptData'
+import { StepLabel } from './StepLabel'
 
 interface Props {
   spectrum: SpectrumBin[]
@@ -78,13 +79,15 @@ export function MaterialIdentification({ spectrum, totalAtoms }: Props) {
   const materialLabel = uniqueElements.map(e => e.label).join('-')
 
   return (
-    <section
-      className="flex flex-col gap-6 p-6 rounded-r-xl"
-      style={{
-        borderLeft: '2px solid var(--border-hi)',
-        background: 'rgba(255, 255, 255, 0.016)',
-      }}
-    >
+    <section className="flex flex-col gap-3">
+      <StepLabel n="01" title="Material Identification" />
+      <div
+        className="flex flex-col gap-6 p-6 rounded-r-xl"
+        style={{
+          borderLeft: '2px solid var(--border-hi)',
+          background: 'rgba(255, 255, 255, 0.016)',
+        }}
+      >
 
       {/* Header */}
       <div className="flex flex-col gap-1">
@@ -180,6 +183,7 @@ export function MaterialIdentification({ spectrum, totalAtoms }: Props) {
         Automated identification based on known APT m/z signatures. Assign definitive element ranges in Step 3: Range.
       </p>
 
+      </div>
     </section>
   )
 }

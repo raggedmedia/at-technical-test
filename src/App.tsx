@@ -6,16 +6,6 @@ import { NextStepsFooter } from './components/NextStepsFooter'
 import { useAptData } from './hooks/useAptData'
 import { DatasetNav } from './components/DatasetNav'
 
-function StepLabel({ n, title }: { n: string; title: string }) {
-  return (
-    <div className="flex items-center gap-3 mb-3">
-      <span className="font-(--font-mono) text-[11px] text-(--text-dim) tabular-nums shrink-0">{n}</span>
-      <span className="h-px flex-1 bg-(--border-dim)" />
-      <span className="font-(--font-mono) text-[11px] uppercase tracking-[0.18em] text-(--text-dim) shrink-0">{title}</span>
-    </div>
-  )
-}
-
 function App() {
   const { summary, atoms, summaryLoading, atomsLoading, error } = useAptData()
 
@@ -37,20 +27,11 @@ function App() {
         {summary && (
           <>
             <DatasetNav filename="atom_probe_tomography_data-public.epos" status="Processed" />
-            <DatasetHeader data={summary} />
-            <div className="px-8 pb-16 flex flex-col gap-8">
-              <div>
-                <StepLabel n="01" title="Material Identification" />
-                <MaterialIdentification spectrum={summary.spectrum} totalAtoms={summary.atomCount} />
-              </div>
-              <div>
-                <StepLabel n="02" title="Mass Spectrum" />
-                <MassSpectrum spectrum={summary.spectrum} totalAtoms={summary.atomCount} />
-              </div>
-              <div>
-                <StepLabel n="03" title="Reconstruction Geometry" />
-                <PointCloud3D atoms={atoms ?? []} loading={atomsLoading} />
-              </div>
+            <div className="px-8 pb-16 flex flex-col gap-12">
+                <DatasetHeader data={summary} />
+              <MaterialIdentification spectrum={summary.spectrum} totalAtoms={summary.atomCount} />
+              <MassSpectrum spectrum={summary.spectrum} totalAtoms={summary.atomCount} />
+              <PointCloud3D atoms={atoms ?? []} loading={atomsLoading} />
             </div>
             <NextStepsFooter spectrum={summary.spectrum} totalAtoms={summary.atomCount} />
           </>
