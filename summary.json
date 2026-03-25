@@ -1,0 +1,28 @@
+{
+  "filename": "atom_probe_tomography_data-public.epos",
+  "fileSizeBytes": 290225452,
+  "estimatedAtoms": 14250000,
+  "sampleSize": 10000,
+  "dimensions": {
+    "x": {
+      "min": -25.5,
+      "max": 25.5,
+      "range_nm": 51.0
+    },
+    "y": {
+      "min": -25.5,
+      "max": 25.5,
+      "range_nm": 51.0
+    },
+    "z": {
+      "min": 0.0,
+      "max": 105.2,
+      "range_nm": 105.2
+    }
+  },
+  "metadata": {
+    "status": "Processed",
+    "materialType": "Unknown Alloy",
+    "confidenceScore": 0.94
+  }
+}
