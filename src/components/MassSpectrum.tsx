@@ -90,17 +90,30 @@ export function MassSpectrum({ spectrum, totalAtoms }: Props) {
           </p>
         </div>
 
-        {/* Log / Linear toggle */}
-        <div className="flex items-center gap-1 p-0.5 rounded-lg bg-(--bg-base) border border-(--border-dim) shrink-0">
+        {/* Log / Linear toggle — sliding pill with spring physics */}
+        <div
+          className="relative flex items-center p-0.5 rounded-lg bg-(--bg-base) border border-(--border-dim) shrink-0"
+          style={{ gap: 0 }}
+        >
+          {/* Sliding pill — translates between the two positions */}
+          <span
+            aria-hidden
+            className="absolute top-0.5 bottom-0.5 rounded-md bg-(--bg-card-hi) shadow-sm pointer-events-none"
+            style={{
+              width: 'calc(50% - 2px)',
+              left: '2px',
+              transform: scale === 'linear' ? 'translateX(calc(100% + 0px))' : 'translateX(0)',
+              transition: 'transform 220ms var(--ease-spring)',
+            }}
+          />
           {(['log', 'linear'] as const).map(s => (
             <button
               key={s}
               onClick={() => setScale(s)}
               className={[
-                'px-3 py-1 rounded-md text-xs font-(--font-mono) transition-colors duration-150 cursor-pointer border-0',
-                scale === s
-                  ? 'bg-(--bg-card-hi) text-(--text-primary) shadow-sm'
-                  : 'text-(--text-dim) hover:text-(--text-secondary) bg-transparent',
+                'relative z-10 px-3 py-1 rounded-md text-xs font-(--font-mono) cursor-pointer border-0 bg-transparent w-14 text-center',
+                'transition-colors duration-150',
+                scale === s ? 'text-(--text-primary)' : 'text-(--text-dim) hover:text-(--text-secondary)',
               ].join(' ')}
             >
               {s}

@@ -57,14 +57,29 @@ export function NextStepsFooter({ spectrum, totalAtoms }: Props) {
             <button
               disabled={!clean}
               className={[
-                'w-full flex items-center justify-between px-5 py-3.5 rounded-xl text-sm font-medium border transition-all duration-150',
+                'group w-full flex items-center justify-between px-5 py-3.5 rounded-xl text-sm font-medium border',
+                'transition-all duration-200',
                 clean
-                  ? 'bg-(--accent) border-transparent text-white cursor-pointer hover:brightness-110 shadow-[0_0_24px_rgba(59,130,246,0.25)]'
+                  ? 'bg-(--accent) border-transparent text-white cursor-pointer hover:brightness-110'
                   : 'bg-(--bg-base) border-(--border-dim) text-(--text-dim) cursor-not-allowed opacity-40',
               ].join(' ')}
+              style={clean ? {
+                boxShadow: '0 8px 32px rgba(59,130,246,0.3), 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15)',
+                transitionTimingFunction: 'var(--ease-out-quart)',
+              } : {}}
             >
               <span>Range this Dataset</span>
-              <span className="opacity-70">→</span>
+              <span
+                className="opacity-70 transition-transform duration-200"
+                style={{ transitionTimingFunction: 'var(--ease-spring)' }}
+                ref={el => {
+                  if (!el) return
+                  const btn = el.closest('button')
+                  if (!btn) return
+                  btn.addEventListener('mouseenter', () => { el.style.transform = 'translateX(4px)' })
+                  btn.addEventListener('mouseleave', () => { el.style.transform = '' })
+                }}
+              >→</span>
             </button>
             <p className="text-[11px] text-(--text-dim) m-0 px-1 leading-relaxed">
               Step 3 — Assign definitive element identities to m/z peaks. Required before compositional analysis or simulation.
@@ -76,14 +91,25 @@ export function NextStepsFooter({ spectrum, totalAtoms }: Props) {
             <button
               disabled={!clean}
               className={[
-                'w-full flex items-center justify-between px-5 py-3.5 rounded-xl text-sm font-medium border transition-all duration-150',
+                'group w-full flex items-center justify-between px-5 py-3.5 rounded-xl text-sm font-medium border transition-all duration-200',
                 clean
                   ? 'bg-transparent border-(--border-hi) text-(--text-primary) cursor-pointer hover:bg-(--bg-card-hi) hover:border-(--accent)'
                   : 'bg-(--bg-base) border-(--border-dim) text-(--text-dim) cursor-not-allowed opacity-40',
               ].join(' ')}
+              style={{ transitionTimingFunction: 'var(--ease-out-quart)' }}
             >
               <span>Compare to Simulation</span>
-              <span className="opacity-50">→</span>
+              <span
+                className="opacity-50 transition-transform duration-200"
+                style={{ transitionTimingFunction: 'var(--ease-spring)' }}
+                ref={el => {
+                  if (!el) return
+                  const btn = el.closest('button')
+                  if (!btn) return
+                  btn.addEventListener('mouseenter', () => { el.style.transform = 'translateX(4px)' })
+                  btn.addEventListener('mouseleave', () => { el.style.transform = '' })
+                }}
+              >→</span>
             </button>
             <p className="text-[11px] text-(--text-dim) m-0 px-1 leading-relaxed">
               Match measured spectrum and composition against AT simulation library for this material class.

@@ -1,3 +1,4 @@
+import type React from 'react'
 import type { SpectrumBin } from '../fixtures/aptData'
 
 interface Props {
@@ -124,8 +125,24 @@ export function MaterialIdentification({ spectrum, totalAtoms }: Props) {
         {peaks.map((p, i) => (
           <div
             key={`${p.label}-${p.charge}-${i}`}
-            className="grid gap-4 px-3 py-3 rounded-lg items-center transition-colors hover:bg-(--bg-card-hi)"
-            style={{ gridTemplateColumns: '2fr 3fr 2fr 2fr 3fr' }}
+            className="grid gap-4 px-3 py-3 rounded-lg items-center"
+            style={{
+              gridTemplateColumns: '2fr 3fr 2fr 2fr 3fr',
+              transition: 'transform 150ms var(--ease-out-quart), background 120ms ease, border-color 120ms ease',
+              borderLeft: '2px solid transparent',
+            }}
+            onMouseEnter={e => {
+              const el = e.currentTarget
+              el.style.background = 'var(--bg-card-hi)'
+              el.style.transform = 'translateX(3px)'
+              el.style.borderLeftColor = 'rgba(59,130,246,0.35)'
+            }}
+            onMouseLeave={e => {
+              const el = e.currentTarget
+              el.style.background = ''
+              el.style.transform = ''
+              el.style.borderLeftColor = 'transparent'
+            }}
           >
             {/* Ion label */}
             <div className="flex items-center gap-2">
@@ -143,17 +160,20 @@ export function MaterialIdentification({ spectrum, totalAtoms }: Props) {
               {p.peakMz.toFixed(1)} Da
             </span>
 
-            {/* Count + bar */}
+            {/* Count + animated bar */}
             <div className="flex flex-col gap-1">
               <span className="tabular-nums font-(--font-mono) text-sm text-(--text-primary)">{formatCount(p.count)}</span>
               <div className="h-1 rounded-full bg-(--border-dim) overflow-hidden w-full">
                 <div
                   className="h-full rounded-full"
                   style={{
-                    width: `${Math.min(100, p.pct * 4)}%`,
+                    '--bar-width': `${Math.min(100, p.pct * 4)}%`,
+                    width: 'var(--bar-width)',
                     background: p.color,
                     opacity: 0.7,
-                  }}
+                    animation: `growBar 600ms var(--ease-out-quart) both`,
+                    animationDelay: `${i * 60}ms`,
+                  } as React.CSSProperties}
                 />
               </div>
             </div>

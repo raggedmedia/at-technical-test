@@ -1,4 +1,30 @@
+import { useEffect, useRef, useState } from 'react'
 import type { AptSummary } from '../fixtures/aptData'
+
+// Count-up: animates from 0 → target over `duration`ms using ease-out-quart.
+// The number "arriving" makes it feel like data was computed, not just rendered.
+function useCountUp(target: number, duration = 1200): number {
+  const [value, setValue] = useState(0)
+  const rafRef = useRef<number>(0)
+  const startRef = useRef<number>(0)
+
+  useEffect(() => {
+    const easeOutQuart = (t: number) => 1 - Math.pow(1 - t, 4)
+    const start = performance.now()
+    startRef.current = start
+
+    const tick = (now: number) => {
+      const elapsed = now - start
+      const progress = Math.min(elapsed / duration, 1)
+      setValue(Math.round(easeOutQuart(progress) * target))
+      if (progress < 1) rafRef.current = requestAnimationFrame(tick)
+    }
+    rafRef.current = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(rafRef.current)
+  }, [target, duration])
+
+  return value
+}
 
 interface Props {
   data: AptSummary
@@ -33,18 +59,8 @@ export function DatasetHeader({ data }: Props) {
         <ProcessedBadge />
       </div>
 
-      {/* Hero: atom count */}
-      <div className="flex flex-col gap-2">
-        <p className="font-(--font-mono) text-[11px] uppercase tracking-[0.22em] text-(--text-dim) m-0">
-          Ions Detected
-        </p>
-        <p className="tabular-nums text-[clamp(52px,8vw,84px)] font-semibold leading-none tracking-[-0.03em] text-(--text-primary) m-0">
-          {data.atomCount.toLocaleString('en-US')}
-        </p>
-        <p className="text-sm text-(--text-secondary) m-0">
-          individual ions in 3D reconstruction
-        </p>
-      </div>
+      {/* Hero: animated ion count */}
+      <HeroCount atomCount={data.atomCount} />
 
       {/* Stat cards */}
       <div className="grid grid-cols-3 gap-3">
@@ -72,6 +88,23 @@ export function DatasetHeader({ data }: Props) {
   )
 }
 
+function HeroCount({ atomCount }: { atomCount: number }) {
+  const count = useCountUp(atomCount, 1200)
+  return (
+    <div className="flex flex-col gap-2">
+      <p className="font-(--font-mono) text-[11px] uppercase tracking-[0.22em] text-(--text-dim) m-0">
+        Ions Detected
+      </p>
+      <p className="tabular-nums text-[clamp(52px,8vw,84px)] font-semibold leading-none tracking-[-0.03em] text-(--text-primary) m-0">
+        {count.toLocaleString('en-US')}
+      </p>
+      <p className="text-sm text-(--text-secondary) m-0">
+        individual ions in 3D reconstruction
+      </p>
+    </div>
+  )
+}
+
 function ProcessedBadge() {
   return (
     <div className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-(--green-dim) border border-(--green-border) text-(--green) shadow-[0_0_16px_rgba(34,197,94,0.08)] whitespace-nowrap">
@@ -90,7 +123,20 @@ interface StatCardProps {
 
 function StatCard({ label, value, sub, detail }: StatCardProps) {
   return (
-    <div className="card p-5 flex flex-col gap-2.5">
+    <div
+      className="card p-5 flex flex-col gap-2.5 transition-all duration-200 cursor-default"
+      style={{ transitionTimingFunction: 'var(--ease-out-quart)' }}
+      onMouseEnter={e => {
+        const el = e.currentTarget
+        el.style.transform = 'translateY(-2px)'
+        el.style.boxShadow = 'var(--shadow-level-3)'
+      }}
+      onMouseLeave={e => {
+        const el = e.currentTarget
+        el.style.transform = ''
+        el.style.boxShadow = ''
+      }}
+    >
       <p className="font-(--font-mono) text-[10px] uppercase tracking-[0.2em] text-(--text-dim) m-0">
         {label}
       </p>
