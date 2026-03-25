@@ -2,6 +2,7 @@ import { DatasetHeader } from './components/DatasetHeader'
 import { MaterialIdentification } from './components/MaterialIdentification'
 import { MassSpectrum } from './components/MassSpectrum'
 import { PointCloud2D } from './components/PointCloud2D'
+import { NextStepsFooter } from './components/NextStepsFooter'
 import { useAptData } from './hooks/useAptData'
 
 function StepLabel({ n, title }: { n: string; title: string }) {
@@ -49,6 +50,7 @@ function App() {
                 <PointCloud2D atoms={atoms ?? []} loading={atomsLoading} />
               </div>
             </div>
+            <NextStepsFooter spectrum={summary.spectrum} totalAtoms={summary.atomCount} />
           </>
         )}
       </main>
