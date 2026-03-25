@@ -78,33 +78,18 @@ export function MaterialIdentification({ spectrum, totalAtoms }: Props) {
   const materialLabel = uniqueElements.map(e => e.label).join('-')
 
   return (
-    <section className="card p-6 flex flex-col gap-6">
+    <section className="flex flex-col gap-6">
 
       {/* Header */}
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex flex-col gap-1">
-          <p className="font-(--font-mono) text-[10px] uppercase tracking-[0.2em] text-(--text-dim) m-0">
-            First Look · Automated Identification
-          </p>
-          <div className="flex items-baseline gap-3">
-            <h2 className="text-2xl font-semibold tracking-tight text-(--text-primary) m-0">
-              {materialLabel} Alloy
-            </h2>
-            <span className="text-sm text-(--text-secondary)">Fe-Ni based · iron matrix</span>
-          </div>
-        </div>
-        {/* Acquisition quality badge */}
-        <div
-          className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap border"
-          style={{
-            color: quality.color,
-            background: `${quality.color}18`,
-            borderColor: `${quality.color}40`,
-            boxShadow: `0 0 12px ${quality.color}14`,
-          }}
-        >
-          <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: quality.color, boxShadow: `0 0 5px ${quality.color}` }} />
-          Acquisition: {quality.label}
+      <div className="flex flex-col gap-1">
+        <p className="font-(--font-mono) text-[10px] uppercase tracking-[0.2em] text-(--text-dim) m-0">
+          First Look · Automated Identification
+        </p>
+        <div className="flex items-baseline gap-3">
+          <h2 className="text-2xl font-semibold tracking-tight text-(--text-primary) m-0">
+            {materialLabel} Alloy
+          </h2>
+          <span className="text-sm text-(--text-secondary)">Fe-Ni based · iron matrix</span>
         </div>
       </div>
 

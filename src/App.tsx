@@ -4,6 +4,7 @@ import { MassSpectrum } from './components/MassSpectrum'
 import { PointCloud3D } from './components/PointCloud3D'
 import { NextStepsFooter } from './components/NextStepsFooter'
 import { useAptData } from './hooks/useAptData'
+import { DatasetNav } from './components/DatasetNav'
 
 function StepLabel({ n, title }: { n: string; title: string }) {
   return (
@@ -35,6 +36,7 @@ function App() {
         )}
         {summary && (
           <>
+            <DatasetNav filename="atom_probe_tomography_data-public.epos" status="Processed" />
             <DatasetHeader data={summary} />
             <div className="px-8 pb-16 flex flex-col gap-8">
               <div>
