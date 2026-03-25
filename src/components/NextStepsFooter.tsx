@@ -18,7 +18,14 @@ export function NextStepsFooter({ spectrum, totalAtoms }: Props) {
 
   return (
     <footer className="px-8 pb-16">
-      <div className="card p-8 flex flex-col gap-6">
+      <div
+        className="card p-8 flex flex-col gap-6"
+        style={{
+          boxShadow: 'var(--shadow-level-3)',
+          borderTopColor: clean ? 'rgba(34, 197, 94, 0.45)' : 'rgba(245, 158, 11, 0.45)',
+          borderTopWidth: '2px',
+        }}
+      >
 
         {/* Status summary */}
         <div className="flex items-start gap-4">

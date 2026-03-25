@@ -80,7 +80,7 @@ export function PointCloud3D({ atoms, loading }: Props) {
             gl={{ antialias: true }}
           >
             {/* Set WebGL clear colour to match app background */}
-            <color attach="background" args={['#0f1117']} />
+            <color attach="background" args={['#141720']} />
 
             {/* Free orbit: left-drag = rotate, scroll = zoom, right-drag = pan */}
             <OrbitControls

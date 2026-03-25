@@ -78,7 +78,13 @@ export function MaterialIdentification({ spectrum, totalAtoms }: Props) {
   const materialLabel = uniqueElements.map(e => e.label).join('-')
 
   return (
-    <section className="flex flex-col gap-6">
+    <section
+      className="flex flex-col gap-6 p-6 rounded-r-xl"
+      style={{
+        borderLeft: '2px solid var(--border-hi)',
+        background: 'rgba(255, 255, 255, 0.016)',
+      }}
+    >
 
       {/* Header */}
       <div className="flex flex-col gap-1">
