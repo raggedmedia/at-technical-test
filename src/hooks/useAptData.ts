@@ -4,6 +4,7 @@ import type { AptSummary } from '../fixtures/aptData'
 export interface AtomPoint {
   x: number
   y: number
+  z: number
   mz: number
 }
 
@@ -47,9 +48,9 @@ export function useAptData(): AptData {
         if (!r.ok) throw new Error(`atoms.json: ${r.status}`)
         return r.json()
       })
-      .then((raw: [number, number, number][]) => {
-        // atoms.json is [[x, y, mz], ...] — convert to typed objects
-        setAtoms(raw.map(([x, y, mz]) => ({ x, y, mz })))
+      .then((raw: [number, number, number, number][]) => {
+        // atoms.json is [[x, y, z, mz], ...] — convert to typed objects
+        setAtoms(raw.map(([x, y, z, mz]) => ({ x, y, z, mz })))
         setAtomsLoading(false)
       })
       .catch(err => {

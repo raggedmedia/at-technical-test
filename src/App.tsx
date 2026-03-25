@@ -1,7 +1,7 @@
 import { DatasetHeader } from './components/DatasetHeader'
 import { MaterialIdentification } from './components/MaterialIdentification'
 import { MassSpectrum } from './components/MassSpectrum'
-import { PointCloud2D } from './components/PointCloud2D'
+import { PointCloud3D } from './components/PointCloud3D'
 import { NextStepsFooter } from './components/NextStepsFooter'
 import { useAptData } from './hooks/useAptData'
 
@@ -47,7 +47,7 @@ function App() {
               </div>
               <div>
                 <StepLabel n="03" title="Reconstruction Geometry" />
-                <PointCloud2D atoms={atoms ?? []} loading={atomsLoading} />
+                <PointCloud3D atoms={atoms ?? []} loading={atomsLoading} />
               </div>
             </div>
             <NextStepsFooter spectrum={summary.spectrum} totalAtoms={summary.atomCount} />

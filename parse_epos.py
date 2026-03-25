@@ -115,7 +115,7 @@ def parse_epos(filepath):
 
             # Point cloud sample
             if record_idx % stride == 0:
-                sample_atoms.append([round(x, 3), round(y, 3), round(mz, 3)])
+                sample_atoms.append([round(x, 3), round(y, 3), round(z, 3), round(mz, 3)])
 
             record_idx += 1
 
