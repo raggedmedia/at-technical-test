@@ -1,13 +1,14 @@
 import type { DatasetQuality } from '../lib/quality'
 import type { FlagReason } from '../fixtures/datasets'
+import { demoEdge } from '../lib/demoEdge'
 
 interface Props {
   quality: DatasetQuality
 }
 
-const DEMO_EDGE = () => alert("You've reached the edge of the demo — this would open the remediation tool in the full product.")
-const DEMO_ARCHIVE = () => alert("You've reached the edge of the demo — this would archive the file in the real app.")
-const DEMO_SIMULATE = () => alert("You've reached the edge of the demo — this would open the simulation tool in the full product.")
+const DEMO_EDGE    = () => demoEdge('This would open the remediation tool in the full product.')
+const DEMO_ARCHIVE = () => demoEdge('This would archive the file in the real app.')
+const DEMO_SIMULATE = () => demoEdge('This would open the simulation tool in the full product.')
 
 const FLAGGED_CTA_LABEL: Record<FlagReason, string> = {
   'surface-contamination':    'Trim Surface Layer',
