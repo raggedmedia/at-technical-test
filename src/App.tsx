@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { DatasetHeader } from './components/DatasetHeader'
 import { MaterialIdentification } from './components/MaterialIdentification'
 import { MassSpectrum } from './components/MassSpectrum'
@@ -8,6 +9,7 @@ import { DatasetNav } from './components/DatasetNav'
 
 function App() {
   const { summary, atoms, summaryLoading, atomsLoading, error } = useAptData()
+  const [selectedPeak, setSelectedPeak] = useState<string | null>(null)
 
   return (
     <div className="min-h-screen bg-(--bg-base)">
@@ -27,11 +29,13 @@ function App() {
         {summary && (
           <>
             <DatasetNav filename="atom_probe_tomography_data-public.epos" status="Processed" />
-            <div className="px-8 pb-16 flex flex-col gap-12">
+            <div className="px-8 pb-16 flex flex-col gap-24">
                 <DatasetHeader data={summary} />
-              <MaterialIdentification spectrum={summary.spectrum} totalAtoms={summary.atomCount} />
-              <MassSpectrum spectrum={summary.spectrum} totalAtoms={summary.atomCount} />
-              <PointCloud3D atoms={atoms ?? []} loading={atomsLoading} />
+                <div className="flex flex-col gap-8">
+                <MaterialIdentification spectrum={summary.spectrum} totalAtoms={summary.atomCount} />
+                <MassSpectrum spectrum={summary.spectrum} totalAtoms={summary.atomCount} selectedPeak={selectedPeak} onSelectPeak={setSelectedPeak} />
+              </div>
+              <PointCloud3D atoms={atoms ?? []} loading={atomsLoading} selectedPeak={selectedPeak} onSelectPeak={setSelectedPeak} />
             </div>
             <NextStepsFooter spectrum={summary.spectrum} totalAtoms={summary.atomCount} />
           </>

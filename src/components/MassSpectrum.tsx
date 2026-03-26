@@ -1,110 +1,195 @@
-import { useState, useMemo } from 'react'
-import { StepLabel } from './StepLabel'
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ReferenceLine,
-  ResponsiveContainer,
-  CartesianGrid,
-} from 'recharts'
+import { useState, useMemo, useRef, useEffect, useCallback } from 'react'
 import type { SpectrumBin } from '../fixtures/aptData'
+import { ELEMENT_PEAKS } from '../fixtures/elementPeaks'
 
 interface Props {
   spectrum: SpectrumBin[]
   totalAtoms: number
+  selectedPeak: string | null
+  onSelectPeak: (label: string | null) => void
 }
 
-// Known element peaks for this Fe-Ni alloy dataset.
-// Charge state noted: ²⁺ means doubly-ionised (mass appears at M/2).
-const ELEMENT_PEAKS = [
-  { mz: 16.0, label: 'O⁺',   color: '#f59e0b' },
-  { mz: 27.9, label: 'Fe²⁺', color: '#3b82f6' },
-  { mz: 31.9, label: 'Ni²⁺', color: '#8b5cf6' },
-  { mz: 55.8, label: 'Fe⁺',  color: '#60a5fa' },
-  { mz: 57.9, label: 'Ni⁺',  color: '#a78bfa' },
-  { mz: 71.9, label: '?⁺',   color: '#6b7280' },
-]
+// Chart margins — must match between draw and hit-test
+const ML = 54, MR = 12, MT = 28, MB = 36
+const MONO = '"JetBrains Mono", "Fira Code", ui-monospace, monospace'
 
 function formatCount(n: number): string {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(2)}M`
-  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}k`
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
+  if (n >= 1_000) return `${(n / 1_000).toFixed(0)}k`
   return n.toString()
 }
 
-interface TooltipPayload {
-  mz: number
-  count: number
-  logCount: number
+type Bin = { mz: number; count: number; logCount: number }
+
+function draw(
+  canvas: HTMLCanvasElement,
+  data: Bin[],
+  scale: 'log' | 'linear',
+  linearMax: number,
+  selectedPeak: string | null,
+) {
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return
+  const dpr = window.devicePixelRatio || 1
+  const w = canvas.clientWidth
+  const h = canvas.clientHeight
+  if (!w || !h) return
+  canvas.width = w * dpr
+  canvas.height = h * dpr
+  ctx.scale(dpr, dpr)
+
+  const cw = w - ML - MR
+  const ch = h - MT - MB
+  const yMax = scale === 'log' ? 7 : linearMax * 1.05
+
+  const toX = (mz: number) => ML + (mz / 200) * cw
+  const toY = (v: number)  => MT + ch - (v / yMax) * ch
+
+  ctx.clearRect(0, 0, w, h)
+
+  // Horizontal grid
+  const yTicks = scale === 'log'
+    ? [1, 2, 3, 4, 5, 6, 7]
+    : [0.25, 0.5, 0.75, 1.0].map(f => f * linearMax)
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)'
+  ctx.lineWidth = 1
+  yTicks.forEach(v => {
+    const y = toY(v)
+    ctx.beginPath(); ctx.moveTo(ML, y); ctx.lineTo(w - MR, y); ctx.stroke()
+  })
+
+  // X axis baseline
+  ctx.strokeStyle = 'rgba(255,255,255,0.07)'
+  ctx.beginPath(); ctx.moveTo(ML, MT + ch); ctx.lineTo(w - MR, MT + ch); ctx.stroke()
+
+  // Bars
+  const barW = Math.max(0.8, cw / 2000)
+  const activePeak = selectedPeak ? ELEMENT_PEAKS.find(p => p.label === selectedPeak) : null
+
+  if (!activePeak) {
+    ctx.fillStyle = '#7dd3fc'
+    data.forEach(b => {
+      const v = scale === 'log' ? b.logCount : b.count
+      if (v <= 0) return
+      const bh = Math.max(1, (v / yMax) * ch)
+      ctx.fillRect(toX(b.mz), MT + ch - bh, barW, bh)
+    })
+  } else {
+    // Dim all bars
+    ctx.fillStyle = 'rgba(255,255,255,0.09)'
+    data.forEach(b => {
+      const v = scale === 'log' ? b.logCount : b.count
+      if (v <= 0) return
+      const bh = Math.max(1, (v / yMax) * ch)
+      ctx.fillRect(toX(b.mz), MT + ch - bh, barW, bh)
+    })
+    // Highlight selected mz range
+    ctx.fillStyle = activePeak.color
+    data.forEach(b => {
+      if (b.mz < activePeak.mzMin || b.mz >= activePeak.mzMax) return
+      const v = scale === 'log' ? b.logCount : b.count
+      if (v <= 0) return
+      const bh = Math.max(1, (v / yMax) * ch)
+      ctx.fillRect(toX(b.mz), MT + ch - bh, barW, bh)
+    })
+  }
+
+  // Reference lines
+  ELEMENT_PEAKS.forEach(p => {
+    const x = toX(p.mz)
+    const active = !activePeak || activePeak.label === p.label
+    ctx.save()
+    ctx.strokeStyle = p.color
+    ctx.globalAlpha = active ? 0.9 : 0.2
+    ctx.lineWidth = active && activePeak ? 1.5 : 1
+    ctx.setLineDash([4, 3])
+    ctx.beginPath(); ctx.moveTo(x, MT); ctx.lineTo(x, MT + ch); ctx.stroke()
+    ctx.restore()
+    ctx.globalAlpha = active ? 1 : 0.25
+    ctx.fillStyle = p.color
+    ctx.font = `11px ${MONO}`
+    ctx.textAlign = 'center'
+    ctx.fillText(p.label, x, MT - 8)
+    ctx.globalAlpha = 1
+  })
+
+  // Y tick labels
+  ctx.fillStyle = 'rgba(107,114,128,1)'
+  ctx.font = `10px ${MONO}`
+  yTicks.forEach(v => {
+    ctx.textAlign = 'right'
+    const label = scale === 'log' ? `10^${v}` : formatCount(v)
+    ctx.fillText(label, ML - 6, toY(v) + 3)
+  })
+
+  // X tick labels
+  ctx.textAlign = 'center'
+  for (let mz = 0; mz <= 200; mz += 20) {
+    ctx.fillText(`${mz}`, toX(mz), MT + ch + 16)
+  }
+  ctx.textAlign = 'right'
+  ctx.fillText('m/z (Da)', w - MR, MT + ch + 30)
 }
 
-function CustomTooltip({ active, payload }: { active?: boolean; payload?: Array<{ payload: TooltipPayload }> }) {
-  if (!active || !payload?.length) return null
-  const d = payload[0].payload
-  const element = ELEMENT_PEAKS.find(p => Math.abs(p.mz - d.mz) < 0.5)
-  return (
-    <div className="card px-3 py-2.5 flex flex-col gap-1 text-xs min-w-36">
-      <p className="font-(--font-mono) text-(--text-dim) m-0">{d.mz.toFixed(1)} Da</p>
-      <p className="tabular-nums font-semibold text-(--text-primary) m-0">{d.count.toLocaleString('en-US')} ions</p>
-      {element && (
-        <p className="m-0" style={{ color: element.color }}>{element.label}</p>
-      )}
-    </div>
-  )
-}
+interface TooltipState { x: number; y: number; bin: Bin }
 
-export function MassSpectrum({ spectrum, totalAtoms }: Props) {
+export function MassSpectrum({ spectrum, selectedPeak, onSelectPeak }: Props) {
   const [scale, setScale] = useState<'log' | 'linear'>('log')
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [tooltip, setTooltip] = useState<TooltipState | null>(null)
 
-  const data = useMemo(() => {
-    return spectrum.map(bin => ({
-      mz: bin.mz,
-      count: bin.count,
-      logCount: bin.count > 0 ? Math.log10(bin.count) : 0,
-    }))
-  }, [spectrum])
+  const data = useMemo<Bin[]>(() =>
+    spectrum.map(b => ({ mz: b.mz, count: b.count, logCount: b.count > 0 ? Math.log10(b.count) : 0 })),
+    [spectrum]
+  )
+  const linearMax = useMemo(() => Math.max(...data.map(d => d.count)), [data])
 
-  const dataKey = scale === 'log' ? 'logCount' : 'count'
+  // Redraw whenever scale, data, or selection changes
+  useEffect(() => {
+    const c = canvasRef.current; if (!c) return
+    draw(c, data, scale, linearMax, selectedPeak)
+  }, [data, scale, linearMax, selectedPeak])
 
-  const yDomain = useMemo(() => {
-    if (scale === 'log') return [0, 7] as [number, number]
-    const max = Math.max(...data.map(d => d.count))
-    return [0, max * 1.05] as [number, number]
-  }, [scale, data])
+  // Redraw on resize
+  useEffect(() => {
+    const c = canvasRef.current; if (!c) return
+    const ro = new ResizeObserver(() => draw(c, data, scale, linearMax, selectedPeak))
+    ro.observe(c)
+    return () => ro.disconnect()
+  }, [data, scale, linearMax, selectedPeak])
 
-  const yTickFormatter = (v: number) =>
-    scale === 'log' ? `10^${v.toFixed(0)}` : formatCount(v)
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+    const c = canvasRef.current; if (!c) return
+    const rect = c.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const cw = c.clientWidth - ML - MR
+    const mz = ((x - ML) / cw) * 200
+    if (mz < 0 || mz > 200) { setTooltip(null); return }
+    const bin = data.reduce((b, d) => Math.abs(d.mz - mz) < Math.abs(b.mz - mz) ? d : b)
+    setTooltip({ x, y: e.clientY - rect.top, bin })
+  }, [data])
+
+  const ttElement = tooltip ? ELEMENT_PEAKS.find(p => Math.abs(p.mz - tooltip.bin.mz) < 0.5) : null
 
   return (
-    <section className="flex flex-col gap-3">
-      <StepLabel n="02" title="Mass Spectrum" />
-      <div className="card p-6 flex flex-col gap-5">
-
+    <div
+      className="flex flex-col gap-5 p-6 rounded-xl"
+      style={{ background: 'var(--bg-card)', border: '1px solid var(--border-dim)' }}
+    >
       {/* Header row */}
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex flex-col gap-1">
-          <p className="font-(--font-mono) text-[10px] uppercase tracking-[0.2em] text-(--text-dim) m-0">
-            Mass Spectrum
-          </p>
-          <p className="text-[13px] text-(--text-secondary) m-0">
-            {totalAtoms.toLocaleString('en-US')} ions · 0.1 Da bin width · {spectrum.length} bins
-          </p>
-        </div>
-
-        {/* Log / Linear toggle — sliding pill with spring physics */}
+      <div className="flex items-center justify-between gap-4">
+        <p className="font-(--font-mono) text-[11px] uppercase tracking-[0.18em] text-(--text-dim) m-0">
+          Mass Spectrum · 0.1 Da bin width
+        </p>
         <div
           className="relative flex items-center p-0.5 rounded-lg bg-(--bg-base) border border-(--border-dim) shrink-0"
           style={{ gap: 0 }}
         >
-          {/* Sliding pill — translates between the two positions */}
           <span
             aria-hidden
             className="absolute top-0.5 bottom-0.5 rounded-md bg-(--bg-card-hi) shadow-sm pointer-events-none"
             style={{
-              width: 'calc(50% - 2px)',
-              left: '2px',
+              width: 'calc(50% - 2px)', left: '2px',
               transform: scale === 'linear' ? 'translateX(calc(100% + 0px))' : 'translateX(0)',
               transition: 'transform 220ms var(--ease-spring)',
             }}
@@ -114,8 +199,7 @@ export function MassSpectrum({ spectrum, totalAtoms }: Props) {
               key={s}
               onClick={() => setScale(s)}
               className={[
-                'relative z-10 px-3 py-1 rounded-md text-xs font-(--font-mono) cursor-pointer border-0 bg-transparent w-14 text-center',
-                'transition-colors duration-150',
+                'relative z-10 px-3 py-1 rounded-md text-xs font-(--font-mono) cursor-pointer border-0 bg-transparent w-14 text-center transition-colors duration-150',
                 scale === s ? 'text-(--text-primary)' : 'text-(--text-dim) hover:text-(--text-secondary)',
               ].join(' ')}
             >
@@ -125,84 +209,50 @@ export function MassSpectrum({ spectrum, totalAtoms }: Props) {
         </div>
       </div>
 
-      {/* Element legend pills */}
+      {/* Legend — click to isolate element in both views */}
       <div className="flex flex-wrap gap-2">
-        {ELEMENT_PEAKS.map(p => (
-          <span
-            key={p.label}
-            className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-(--font-mono) border border-(--border-dim) bg-(--bg-base)"
-          >
-            <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: p.color }} />
-            <span className="text-(--text-secondary)">{p.label}</span>
-            <span className="text-(--text-dim)">{p.mz} Da</span>
-          </span>
-        ))}
+        {ELEMENT_PEAKS.map(p => {
+          const isActive = selectedPeak === p.label
+          const isDimmed = selectedPeak !== null && !isActive
+          return (
+            <button
+              key={p.label}
+              onClick={() => onSelectPeak(isActive ? null : p.label)}
+              className={[
+                'flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-(--font-mono) border cursor-pointer bg-transparent transition-all duration-150',
+                isActive
+                  ? 'border-(--border-hi) bg-(--bg-card-hi)'
+                  : isDimmed
+                    ? 'border-(--border-dim) opacity-40 hover:opacity-70'
+                    : 'border-(--border-dim) bg-(--bg-base) hover:border-(--border-hi)',
+              ].join(' ')}
+            >
+              <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: p.color }} />
+              <span className={isActive ? 'text-(--text-primary)' : 'text-(--text-secondary)'}>{p.label}</span>
+              <span className="text-(--text-dim)">{p.mz} Da</span>
+            </button>
+          )
+        })}
       </div>
 
-      {/* Chart */}
-      <div className="h-72">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 4, right: 8, bottom: 8, left: 48 }} barCategoryGap={0}>
-            <CartesianGrid
-              strokeDasharray="3 3"
-              stroke="rgba(255,255,255,0.04)"
-              vertical={false}
-            />
-            <XAxis
-              dataKey="mz"
-              type="number"
-              domain={[0, 200]}
-              tickCount={21}
-              tickFormatter={v => `${v}`}
-              tick={{ fontSize: 10, fill: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}
-              axisLine={{ stroke: 'var(--border-dim)' }}
-              tickLine={false}
-              label={{
-                value: 'm/z (Da)',
-                position: 'insideBottomRight',
-                offset: -4,
-                fontSize: 10,
-                fill: 'var(--text-dim)',
-              }}
-            />
-            <YAxis
-              domain={yDomain}
-              tickFormatter={yTickFormatter}
-              tick={{ fontSize: 10, fill: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}
-              axisLine={false}
-              tickLine={false}
-              width={44}
-            />
-            <Tooltip
-              content={<CustomTooltip />}
-              cursor={{ fill: 'rgba(255,255,255,0.04)' }}
-            />
-            {ELEMENT_PEAKS.map(p => (
-              <ReferenceLine
-                key={p.label}
-                x={p.mz}
-                stroke={p.color}
-                strokeOpacity={0.5}
-                strokeDasharray="4 3"
-                label={{
-                  value: p.label,
-                  position: 'top',
-                  fontSize: 9,
-                  fill: p.color,
-                  fontFamily: 'var(--font-mono)',
-                }}
-              />
-            ))}
-            <Bar
-              dataKey={dataKey}
-              fill="var(--accent)"
-              fillOpacity={0.7}
-              isAnimationActive={true}
-              animationDuration={400}
-              animationEasing="ease-out"
-            />
-          </BarChart>
-        </ResponsiveContainer>
+      {/* Canvas */}
+      <div className="h-72 relative">
+        <canvas
+          ref={canvasRef}
+          className="w-full h-full"
+          onMouseMove={handleMouseMove}
+          onMouseLeave={() => setTooltip(null)}
+        />
+        {tooltip && (
+          <div
+            className="card px-3 py-2.5 flex flex-col gap-1 text-xs min-w-36 absolute pointer-events-none"
+            style={{ left: tooltip.x + 14, top: Math.max(0, tooltip.y - 10), zIndex: 10 }}
+          >
+            <p className="font-(--font-mono) text-(--text-dim) m-0">{tooltip.bin.mz.toFixed(1)} Da</p>
+            <p className="tabular-nums font-semibold text-(--text-primary) m-0">{tooltip.bin.count.toLocaleString('en-US')} ions</p>
+            {ttElement && <p className="m-0" style={{ color: ttElement.color }}>{ttElement.label}</p>}
+          </div>
+        )}
       </div>
 
       {/* Scale note */}
@@ -211,8 +261,6 @@ export function MassSpectrum({ spectrum, totalAtoms }: Props) {
           ? 'Log₁₀ scale — standard for APT mass spectra. Reveals minor peaks hidden by dominant Fe²⁺ signal.'
           : 'Linear scale — shows true relative abundance. Minor peaks may not be visible.'}
       </p>
-
-      </div>
-    </section>
+    </div>
   )
 }

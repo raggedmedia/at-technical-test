@@ -3,48 +3,66 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import type { AtomPoint } from '../hooks/useAptData'
 import { StepLabel } from './StepLabel'
+import { ELEMENT_PEAKS } from '../fixtures/elementPeaks'
 
 interface Props {
   atoms: AtomPoint[]
   loading: boolean
+  selectedPeak: string | null
+  onSelectPeak: (label: string | null) => void
 }
 
-// Colour atoms by m/z range — same classification as mass spectrum reference lines
+// Precompute RGB from shared element peaks — runs once at module load
+const PEAK_RGB = ELEMENT_PEAKS.map(p => ({
+  mzMin: p.mzMin,
+  mzMax: p.mzMax,
+  r: parseInt(p.color.slice(1, 3), 16) / 255,
+  g: parseInt(p.color.slice(3, 5), 16) / 255,
+  b: parseInt(p.color.slice(5, 7), 16) / 255,
+}))
+
 function mzToRgb(mz: number): [number, number, number] {
-  if (mz < 18)  return [251 / 255, 191 / 255,  36 / 255]  // amber   — O⁺  ~16 Da
-  if (mz < 30)  return [ 59 / 255, 130 / 255, 246 / 255]  // blue    — Fe²⁺ ~28 Da
-  if (mz < 35)  return [139 / 255,  92 / 255, 246 / 255]  // violet  — Ni²⁺ ~32 Da
-  if (mz < 58)  return [ 96 / 255, 165 / 255, 250 / 255]  // sky     — Fe⁺  ~56 Da
-  if (mz < 65)  return [167 / 255, 139 / 255, 250 / 255]  // purple  — Ni⁺  ~58 Da
-  return          [107 / 255, 114 / 255, 128 / 255]         // grey    — unknown
+  const pc = PEAK_RGB.find(pc => mz >= pc.mzMin && mz < pc.mzMax) ?? PEAK_RGB[PEAK_RGB.length - 1]
+  return [pc.r, pc.g, pc.b]
 }
 
-const LEGEND = [
-  { label: 'O⁺  ~16 Da',   dot: 'bg-amber-400'  },
-  { label: 'Fe²⁺  ~28 Da', dot: 'bg-blue-500'   },
-  { label: 'Ni²⁺  ~32 Da', dot: 'bg-violet-500' },
-  { label: 'Fe⁺  ~56 Da',  dot: 'bg-blue-400'   },
-  { label: 'Ni⁺  ~58 Da',  dot: 'bg-violet-400' },
-  { label: 'Other',         dot: 'bg-gray-500'   },
-]
-
-// Build Float32Arrays once from atom list — re-computed only when atoms change
-function AtomCloud({ atoms }: { atoms: AtomPoint[] }) {
-  const { positions, colors } = useMemo(() => {
-    const positions = new Float32Array(atoms.length * 3)
-    const colors    = new Float32Array(atoms.length * 3)
+// Positions computed once; colors recomputed when selection changes
+function AtomCloud({ atoms, selectedPeak }: { atoms: AtomPoint[]; selectedPeak: string | null }) {
+  const { positions, baseColors } = useMemo(() => {
+    const positions  = new Float32Array(atoms.length * 3)
+    const baseColors = new Float32Array(atoms.length * 3)
     for (let i = 0; i < atoms.length; i++) {
       const a = atoms[i]
       positions[i * 3]     = a.x
       positions[i * 3 + 1] = a.y
       positions[i * 3 + 2] = a.z
       const [r, g, b] = mzToRgb(a.mz)
-      colors[i * 3]     = r
-      colors[i * 3 + 1] = g
-      colors[i * 3 + 2] = b
+      baseColors[i * 3]     = r
+      baseColors[i * 3 + 1] = g
+      baseColors[i * 3 + 2] = b
     }
-    return { positions, colors }
+    return { positions, baseColors }
   }, [atoms])
+
+  const colors = useMemo(() => {
+    if (!selectedPeak) return baseColors
+    const peak = ELEMENT_PEAKS.find(p => p.label === selectedPeak)
+    if (!peak) return baseColors
+    const out = new Float32Array(atoms.length * 3)
+    for (let i = 0; i < atoms.length; i++) {
+      const mz = atoms[i].mz
+      if (mz >= peak.mzMin && mz < peak.mzMax) {
+        out[i * 3]     = baseColors[i * 3]
+        out[i * 3 + 1] = baseColors[i * 3 + 1]
+        out[i * 3 + 2] = baseColors[i * 3 + 2]
+      } else {
+        out[i * 3]     = 0.06
+        out[i * 3 + 1] = 0.06
+        out[i * 3 + 2] = 0.08
+      }
+    }
+    return out
+  }, [atoms, baseColors, selectedPeak])
 
   return (
     <points>
@@ -57,7 +75,7 @@ function AtomCloud({ atoms }: { atoms: AtomPoint[] }) {
   )
 }
 
-export function PointCloud3D({ atoms, loading }: Props) {
+export function PointCloud3D({ atoms, loading, selectedPeak, onSelectPeak }: Props) {
   // Compute z-centre once so the camera targets the middle of the needle
   const centerZ = useMemo(() => {
     if (!atoms.length) return 35
@@ -93,19 +111,32 @@ export function PointCloud3D({ atoms, loading }: Props) {
               maxDistance={300}
             />
 
-            <AtomCloud atoms={atoms} />
+            <AtomCloud atoms={atoms} selectedPeak={selectedPeak} />
           </Canvas>
         )}
       </div>
 
-      {/* Element colour legend */}
+      {/* Element colour legend — click to isolate in both views */}
       <div className="flex flex-wrap gap-x-5 gap-y-2 px-1">
-        {LEGEND.map(({ label, dot }) => (
-          <div key={label} className="flex items-center gap-1.5">
-            <span className={`w-2 h-2 rounded-full shrink-0 ${dot}`} />
-            <span className="font-(--font-mono) text-[11px] text-(--text-secondary)">{label}</span>
-          </div>
-        ))}
+        {ELEMENT_PEAKS.map(p => {
+          const isActive = selectedPeak === p.label
+          const isDimmed = selectedPeak !== null && !isActive
+          return (
+            <button
+              key={p.label}
+              onClick={() => onSelectPeak(isActive ? null : p.label)}
+              className={[
+                'flex items-center gap-1.5 cursor-pointer bg-transparent border-0 p-0 transition-opacity duration-150',
+                isDimmed ? 'opacity-30 hover:opacity-60' : 'opacity-100',
+              ].join(' ')}
+            >
+              <span className="w-2 h-2 rounded-full shrink-0" style={{ background: p.color }} />
+              <span className={['font-(--font-mono) text-[11px]', isActive ? 'text-(--text-primary) font-semibold' : 'text-(--text-secondary)'].join(' ')}>
+                {p.label} ~{p.mz} Da
+              </span>
+            </button>
+          )
+        })}
       </div>
 
       <p className="font-(--font-mono) text-[11px] text-(--text-dim)">
