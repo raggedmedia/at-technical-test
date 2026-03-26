@@ -1,9 +1,10 @@
 import { useState, useMemo, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { DATASETS } from '../fixtures/datasets'
-import type { Dataset, DatasetStatus, FailReason } from '../fixtures/datasets'
+import type { Dataset, DatasetStatus } from '../fixtures/datasets'
 import { computeQuality } from '../lib/quality'
 import { StatusBadge } from '../components/StatusBadge'
+import { demoEdge } from '../lib/demoEdge'
 
 // ─── Formatting ───────────────────────────────────────────────────────────────
 
@@ -269,12 +270,12 @@ function UploadZone() {
       return
     }
     setIsDragInvalid(false)
-    alert("You've reached the edge of the demo — in the real app this file would begin processing.")
+    demoEdge('In the real app this file would begin processing.')
   }
 
   function handleFileChange() {
     if (inputRef.current?.files?.length) {
-      alert("You've reached the edge of the demo — in the real app this file would begin processing.")
+      demoEdge('In the real app this file would begin processing.')
       inputRef.current.value = ''
     }
   }
