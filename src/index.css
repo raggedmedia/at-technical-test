@@ -94,7 +94,13 @@
   box-sizing: border-box;
 }
 
-html, body {
+html {
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+body {
   margin: 0;
   padding: 0;
 }
