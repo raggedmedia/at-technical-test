@@ -14,11 +14,8 @@
   --text-dim: #4b5563;
 
   --accent: #3b82f6;
-  --accent-glow: rgba(59, 130, 246, 0.25);
 
   --green: #22c55e;
-  --green-dim: rgba(34, 197, 94, 0.1);
-  --green-border: rgba(34, 197, 94, 0.25);
 
   /* ── Typography ─────────────────────────────────────── */
   --font-sans: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', system-ui, sans-serif;
@@ -55,9 +52,6 @@
     0 1px 0 rgba(255, 255, 255, 0.12) inset,
     0 8px 32px rgba(0, 4, 18, 0.8),
     0 2px 8px rgba(0, 4, 18, 0.6);
-
-  /* Legacy alias */
-  --shadow-card: var(--shadow-level-2);
 }
 
 /* ── Keyframes ────────────────────────────────────────── */

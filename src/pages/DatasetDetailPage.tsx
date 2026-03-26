@@ -2,7 +2,9 @@ import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useAptData, type AtomPoint } from '../hooks/useAptData'
 import { DATASETS } from '../fixtures/datasets'
+import type { FlagReason } from '../fixtures/datasets'
 import { computeQuality } from '../lib/quality'
+import type { DatasetQuality } from '../lib/quality'
 import type { SpectrumBin } from '../fixtures/aptData'
 import { DatasetNav } from '../components/DatasetNav'
 import { DatasetHeader } from '../components/DatasetHeader'
@@ -11,9 +13,8 @@ import { MassSpectrum } from '../components/MassSpectrum'
 import { PointCloud3D } from '../components/PointCloud3D'
 import { NextStepsFooter } from '../components/NextStepsFooter'
 import { StepLabel } from '../components/StepLabel'
-import type { DatasetQuality } from '../lib/quality'
 
-const GEOMETRY_COPY: Partial<Record<NonNullable<import('../fixtures/datasets').Dataset['flagReason']>, { heading: string; body: string }>> = {
+const GEOMETRY_COPY: Partial<Record<FlagReason, { heading: string; body: string }>> = {
   'surface-contamination': {
     heading: 'Geometry obscured by surface oxide',
     body: 'The O⁺-dominated surface layer cannot be reliably depth-corrected. Strip the first 3–5 nm of Z before reconstruction to recover usable geometry.',
