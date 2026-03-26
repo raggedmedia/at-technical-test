@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import type { AtomPoint } from '../hooks/useAptData'
@@ -76,6 +76,9 @@ function AtomCloud({ atoms, selectedPeak }: { atoms: AtomPoint[]; selectedPeak: 
 }
 
 export function PointCloud3D({ atoms, loading, selectedPeak, onSelectPeak }: Props) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const controlsRef = useRef<any>(null)
+
   // Compute z-centre once so the camera targets the middle of the needle
   const centerZ = useMemo(() => {
     if (!atoms.length) return 35
@@ -87,56 +90,91 @@ export function PointCloud3D({ atoms, loading, selectedPeak, onSelectPeak }: Pro
     return (min + max) / 2
   }, [atoms])
 
+  const selectionStats = useMemo(() => {
+    if (!selectedPeak || !atoms.length) return null
+    const peak = ELEMENT_PEAKS.find(p => p.label === selectedPeak)
+    if (!peak) return null
+    const count = atoms.filter(a => a.mz >= peak.mzMin && a.mz < peak.mzMax).length
+    const pct = ((count / atoms.length) * 100).toFixed(1)
+    return { count, pct, color: peak.color }
+  }, [atoms, selectedPeak])
+
   return (
     <section className="flex flex-col gap-3">
       <StepLabel n="03" title="Reconstruction Geometry" />
       <div className="card flex flex-col gap-4 p-5">
-      <div className="h-[520px] rounded-lg overflow-hidden">
+      <div className="h-130 rounded-lg overflow-hidden relative">
         {loading ? (
           <div className="w-full h-full animate-pulse rounded-lg bg-(--bg-card-hi)" />
         ) : (
-          // Canvas only mounts once atoms are available — camera.position is stable
-          <Canvas
-            camera={{ position: [80, -80, centerZ + 55], fov: 42 }}
-            gl={{ antialias: true }}
-          >
-            {/* Set WebGL clear colour to match app background */}
-            <color attach="background" args={['#141720']} />
-
-            {/* Free orbit: left-drag = rotate, scroll = zoom, right-drag = pan */}
-            <OrbitControls
-              target={[0, 0, centerZ]}
-              makeDefault
-              minDistance={10}
-              maxDistance={300}
-            />
-
-            <AtomCloud atoms={atoms} selectedPeak={selectedPeak} />
-          </Canvas>
-        )}
-      </div>
-
-      {/* Element colour legend — click to isolate in both views */}
-      <div className="flex flex-wrap gap-x-5 gap-y-2 px-1">
-        {ELEMENT_PEAKS.map(p => {
-          const isActive = selectedPeak === p.label
-          const isDimmed = selectedPeak !== null && !isActive
-          return (
-            <button
-              key={p.label}
-              onClick={() => onSelectPeak(isActive ? null : p.label)}
-              className={[
-                'flex items-center gap-1.5 cursor-pointer bg-transparent border-0 p-0 transition-opacity duration-150',
-                isDimmed ? 'opacity-30 hover:opacity-60' : 'opacity-100',
-              ].join(' ')}
+          <>
+            <Canvas
+              camera={{ position: [80, -80, centerZ + 55], fov: 42 }}
+              gl={{ antialias: true }}
             >
-              <span className="w-2 h-2 rounded-full shrink-0" style={{ background: p.color }} />
-              <span className={['font-(--font-mono) text-[11px]', isActive ? 'text-(--text-primary) font-semibold' : 'text-(--text-secondary)'].join(' ')}>
-                {p.label} ~{p.mz} Da
-              </span>
-            </button>
-          )
-        })}
+              <color attach="background" args={['#141720']} />
+              <OrbitControls
+                ref={controlsRef}
+                target={[0, 0, centerZ]}
+                makeDefault
+                minDistance={10}
+                maxDistance={300}
+              />
+              <AtomCloud atoms={atoms} selectedPeak={selectedPeak} />
+            </Canvas>
+
+            {/* Single overlaid control bar: filters left, stat + reset right */}
+            <div className="absolute top-3 left-3 right-3 flex items-center gap-2 pointer-events-none">
+              {/* Element filter pills — left */}
+              <div className="flex flex-wrap gap-1.5 flex-1">
+                {ELEMENT_PEAKS.map(p => {
+                  const isActive = selectedPeak === p.label
+                  const isDimmed = selectedPeak !== null && !isActive
+                  return (
+                    <button
+                      key={p.label}
+                      onClick={() => onSelectPeak(isActive ? null : p.label)}
+                      className={[
+                        'pointer-events-auto flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-(--font-mono) border cursor-pointer transition-all duration-150',
+                        isActive
+                          ? 'bg-(--bg-card-hi) text-(--text-primary)'
+                          : isDimmed
+                            ? 'border-(--border-dim) bg-(--bg-card) opacity-35 hover:opacity-80 hover:bg-(--bg-card-hi) hover:border-(--border-hi)'
+                            : 'border-(--border-dim) bg-(--bg-card) hover:bg-(--bg-card-hi) hover:border-(--border-hi) hover:text-(--text-primary)',
+                      ].join(' ')}
+                      style={isActive ? { border: `1px solid ${p.color}`, boxShadow: `0 0 0 1px ${p.color}22` } : undefined}
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: p.color }} />
+                      <span className={isActive ? 'text-(--text-primary)' : 'text-(--text-secondary)'}>{p.label}</span>
+                      <span className={isActive ? 'text-(--text-secondary)' : 'text-(--text-dim)'}>{p.mz} Da</span>
+                    </button>
+                  )
+                })}
+              </div>
+
+              {/* Selection stat — appears when an element is active */}
+              {selectionStats && (
+                <div
+                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-(--font-mono) border border-(--border-hi) bg-(--bg-card) shrink-0"
+                  style={{ color: selectionStats.color }}
+                >
+                  <span className="tabular-nums">{selectionStats.count.toLocaleString('en-US')} ions</span>
+                  <span className="text-(--text-dim)">·</span>
+                  <span className="tabular-nums text-(--text-secondary)">{selectionStats.pct}%</span>
+                </div>
+              )}
+
+              {/* Reset camera */}
+              <button
+                onClick={() => controlsRef.current?.reset()}
+                title="Reset camera"
+                className="pointer-events-auto shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-(--font-mono) border border-(--border-dim) bg-(--bg-card) text-(--text-dim) cursor-pointer transition-all duration-150 hover:border-(--border-hi) hover:text-(--text-secondary)"
+              >
+                ↺ reset view
+              </button>
+            </div>
+          </>
+        )}
       </div>
 
       <p className="font-(--font-mono) text-[11px] text-(--text-dim)">

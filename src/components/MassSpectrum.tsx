@@ -219,17 +219,18 @@ export function MassSpectrum({ spectrum, selectedPeak, onSelectPeak }: Props) {
               key={p.label}
               onClick={() => onSelectPeak(isActive ? null : p.label)}
               className={[
-                'flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-(--font-mono) border cursor-pointer bg-transparent transition-all duration-150',
+                'flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-(--font-mono) border cursor-pointer transition-all duration-150',
                 isActive
-                  ? 'border-(--border-hi) bg-(--bg-card-hi)'
+                  ? 'bg-(--bg-card-hi) text-(--text-primary)'
                   : isDimmed
-                    ? 'border-(--border-dim) opacity-40 hover:opacity-70'
-                    : 'border-(--border-dim) bg-(--bg-base) hover:border-(--border-hi)',
+                    ? 'border-(--border-dim) bg-(--bg-base) opacity-35 hover:opacity-80 hover:bg-(--bg-card-hi) hover:border-(--border-hi)'
+                    : 'border-(--border-dim) bg-(--bg-base) hover:bg-(--bg-card-hi) hover:border-(--border-hi) hover:text-(--text-primary)',
               ].join(' ')}
+              style={isActive ? { border: `1px solid ${p.color}`, boxShadow: `0 0 0 1px ${p.color}22` } : undefined}
             >
               <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: p.color }} />
               <span className={isActive ? 'text-(--text-primary)' : 'text-(--text-secondary)'}>{p.label}</span>
-              <span className="text-(--text-dim)">{p.mz} Da</span>
+              <span className={isActive ? 'text-(--text-secondary)' : 'text-(--text-dim)'}>{p.mz} Da</span>
             </button>
           )
         })}
