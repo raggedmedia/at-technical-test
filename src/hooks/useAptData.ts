@@ -8,15 +8,12 @@ export interface AtomPoint {
   mz: number
 }
 
-export interface AptData {
-  summary: AptSummary | null
-  atoms: AtomPoint[] | null
-  summaryLoading: boolean
-  atomsLoading: boolean
-  error: string | null
-}
+export type AptDataState =
+  | { state: 'loading' }
+  | { state: 'error'; error: string }
+  | { state: 'ready'; summary: AptSummary; atoms: AtomPoint[] | null; atomsLoading: boolean }
 
-export function useAptData(): AptData {
+export function useAptData(): AptDataState {
   const [summary, setSummary] = useState<AptSummary | null>(null)
   const [atoms, setAtoms] = useState<AtomPoint[] | null>(null)
   const [summaryLoading, setSummaryLoading] = useState(true)
@@ -40,7 +37,7 @@ export function useAptData(): AptData {
       })
   }, [])
 
-  // Lazy: fetch atoms after summary resolved — doesn't block initial render
+  // Lazy: fetch atoms after summary resolves — doesn't block initial render
   useEffect(() => {
     if (summaryLoading) return
     fetch('/data/atoms.json')
@@ -49,7 +46,6 @@ export function useAptData(): AptData {
         return r.json()
       })
       .then((raw: [number, number, number, number][]) => {
-        // atoms.json is [[x, y, z, mz], ...] — convert to typed objects
         setAtoms(raw.map(([x, y, z, mz]) => ({ x, y, z, mz })))
         setAtomsLoading(false)
       })
@@ -59,5 +55,7 @@ export function useAptData(): AptData {
       })
   }, [summaryLoading])
 
-  return { summary, atoms, summaryLoading, atomsLoading, error }
+  if (error !== null) return { state: 'error', error }
+  if (summaryLoading || summary === null) return { state: 'loading' }
+  return { state: 'ready', summary, atoms, atomsLoading }
 }
