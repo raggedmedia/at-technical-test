@@ -15,6 +15,7 @@ function isClean(spectrum: SpectrumBin[], totalAtoms: number): boolean {
 
 export function NextStepsFooter({ spectrum, totalAtoms }: Props) {
   const clean = isClean(spectrum, totalAtoms)
+  const accentColor = clean ? '#22c55e' : '#f59e0b'
 
   return (
     <footer className="px-8 pb-16">
@@ -27,110 +28,71 @@ export function NextStepsFooter({ spectrum, totalAtoms }: Props) {
         }}
       >
 
-        {/* Status summary */}
-        <div className="flex items-start gap-4">
-          <div
-            className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-            style={{
-              background: clean ? 'rgba(34,197,94,0.12)' : 'rgba(245,158,11,0.12)',
-              border: `1px solid ${clean ? 'rgba(34,197,94,0.25)' : 'rgba(245,158,11,0.25)'}`,
-            }}
-          >
-            <span className="text-base leading-none" style={{ color: clean ? '#22c55e' : '#f59e0b' }}>
+        {/* Status + description — narrow, left */}
+        <div className="flex flex-col gap-2 max-w-sm">
+          <div className="flex items-center gap-2.5">
+            <span
+              className="w-5 h-5 rounded-full flex items-center justify-center text-[11px] shrink-0"
+              style={{
+                background: clean ? 'rgba(34,197,94,0.12)' : 'rgba(245,158,11,0.12)',
+                border: `1px solid ${clean ? 'rgba(34,197,94,0.3)' : 'rgba(245,158,11,0.3)'}`,
+                color: accentColor,
+              }}
+            >
               {clean ? '✓' : '⚠'}
             </span>
+            <span className="text-sm font-semibold text-(--text-primary)">
+              {clean ? 'Ready to simulate' : 'Review required'}
+            </span>
           </div>
-          <div className="flex flex-col gap-1.5">
-            <h3 className="text-base font-semibold text-(--text-primary) m-0">
-              {clean
-                ? 'Dataset looks clean. Ready for analysis.'
-                : 'Dataset flagged for review. Resolve before proceeding.'}
-            </h3>
-            <p className="text-sm text-(--text-secondary) m-0 leading-relaxed">
-              {clean
-                ? 'Fe-Ni alloy confirmed. Acquisition quality clean. 1 unidentified peak at 71.9 Da — assign identity in ranging step.'
-                : 'Unexpected dominant peak detected. Review reconstruction parameters before ranging.'}
-            </p>
-          </div>
+          <p className="text-sm text-(--text-secondary) m-0 leading-relaxed">
+            {clean
+              ? 'Fe-Ni alloy confirmed. Element identities auto-assigned. Use this reconstruction as a first-principles simulation seed, or validate against an existing simulation.'
+              : 'Unexpected dominant peak detected. Review reconstruction parameters before proceeding to simulation.'}
+          </p>
         </div>
 
-        <div className="h-px bg-(--border-dim)" />
+        {/* Actions — side by side, primary bottom-right */}
+        <div className="flex items-end justify-between gap-4">
+          <p className="text-[11px] text-(--text-dim) m-0 leading-relaxed max-w-xs">
+            The 3D atomic positions and element identities from this dataset seed the simulation directly — no intermediate steps required.
+          </p>
 
-        {/* Actions */}
-        <div className="flex items-start gap-4 flex-wrap">
-
-          {/* Primary: Range */}
-          <div className="flex flex-col gap-2 flex-1 min-w-64">
+          <div className="flex items-center gap-3 shrink-0">
+            {/* Secondary */}
             <button
               disabled={!clean}
               className={[
-                'group w-full flex items-center justify-between px-5 py-3.5 rounded-xl text-sm font-medium border',
-                'transition-all duration-200',
+                'flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium border transition-all duration-200',
+                clean
+                  ? 'bg-transparent border-(--border-hi) text-(--text-secondary) cursor-pointer hover:bg-(--bg-card-hi) hover:border-(--accent) hover:text-(--text-primary)'
+                  : 'bg-transparent border-(--border-dim) text-(--text-dim) cursor-not-allowed opacity-30',
+              ].join(' ')}
+              style={{ transitionTimingFunction: 'var(--ease-out-quart)' }}
+            >
+              <span>Compare to Simulation</span>
+              <span className="opacity-50">→</span>
+            </button>
+
+            {/* Primary */}
+            <button
+              disabled={!clean}
+              className={[
+                'flex items-center gap-2 px-5 py-3.5 rounded-xl text-sm font-semibold border transition-all duration-200',
                 clean
                   ? 'bg-(--accent) border-transparent text-white cursor-pointer hover:brightness-110'
-                  : 'bg-(--bg-base) border-(--border-dim) text-(--text-dim) cursor-not-allowed opacity-40',
+                  : 'bg-(--bg-base) border-(--border-dim) text-(--text-dim) cursor-not-allowed opacity-30',
               ].join(' ')}
               style={clean ? {
                 boxShadow: '0 8px 32px rgba(59,130,246,0.3), 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15)',
                 transitionTimingFunction: 'var(--ease-out-quart)',
               } : {}}
             >
-              <span>Range this Dataset</span>
-              <span
-                className="opacity-70 transition-transform duration-200"
-                style={{ transitionTimingFunction: 'var(--ease-spring)' }}
-                ref={el => {
-                  if (!el) return
-                  const btn = el.closest('button')
-                  if (!btn) return
-                  btn.addEventListener('mouseenter', () => { el.style.transform = 'translateX(4px)' })
-                  btn.addEventListener('mouseleave', () => { el.style.transform = '' })
-                }}
-              >→</span>
+              <span>New Simulation from Dataset</span>
+              <span className="opacity-70">→</span>
             </button>
-            <p className="text-[11px] text-(--text-dim) m-0 px-1 leading-relaxed">
-              Step 3 — Assign definitive element identities to m/z peaks. Required before compositional analysis or simulation.
-            </p>
           </div>
-
-          {/* Secondary: Compare */}
-          <div className="flex flex-col gap-2 flex-1 min-w-64">
-            <button
-              disabled={!clean}
-              className={[
-                'group w-full flex items-center justify-between px-5 py-3.5 rounded-xl text-sm font-medium border transition-all duration-200',
-                clean
-                  ? 'bg-transparent border-(--border-hi) text-(--text-primary) cursor-pointer hover:bg-(--bg-card-hi) hover:border-(--accent)'
-                  : 'bg-(--bg-base) border-(--border-dim) text-(--text-dim) cursor-not-allowed opacity-40',
-              ].join(' ')}
-              style={{ transitionTimingFunction: 'var(--ease-out-quart)' }}
-            >
-              <span>Compare to Simulation</span>
-              <span
-                className="opacity-50 transition-transform duration-200"
-                style={{ transitionTimingFunction: 'var(--ease-spring)' }}
-                ref={el => {
-                  if (!el) return
-                  const btn = el.closest('button')
-                  if (!btn) return
-                  btn.addEventListener('mouseenter', () => { el.style.transform = 'translateX(4px)' })
-                  btn.addEventListener('mouseleave', () => { el.style.transform = '' })
-                }}
-              >→</span>
-            </button>
-            <p className="text-[11px] text-(--text-dim) m-0 px-1 leading-relaxed">
-              Match measured spectrum and composition against AT simulation library for this material class.
-            </p>
-          </div>
-
         </div>
-
-        {/* Downstream hint */}
-        <p className="text-[11px] text-(--text-dim) m-0 pt-3 border-t border-(--border-dim) leading-relaxed">
-          After ranging →{' '}
-          <span className="text-(--text-secondary) font-medium">New Simulation from Dataset</span>
-          {' '}— use the 3D atomic reconstruction as a first-principles simulation starting configuration.
-        </p>
 
       </div>
     </footer>
