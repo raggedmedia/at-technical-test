@@ -370,7 +370,7 @@ export function DatasetsPage() {
             <UploadZone />
           </div>
         ) : (
-          <div className="px-8 py-6 flex flex-col gap-6">
+          <div className="px-8 py-6 flex flex-col gap-16">
             {/* Tier 3: table card — elevated off the page base */}
             <div className="card overflow-hidden">
               <DatasetTable datasets={DATASETS} />
