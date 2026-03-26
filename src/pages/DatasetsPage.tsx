@@ -306,10 +306,10 @@ function UploadZone() {
             ? 'linear-gradient(to bottom, rgba(239, 68, 68, 0.05) 0px, transparent 80px)'
             : 'linear-gradient(to bottom, rgba(34, 197, 94, 0.045) 0px, transparent 80px)',
           boxShadow: isDragInvalid
-            ? '0 0 0 1px rgba(255,255,255,0.06) inset, 0 1px 0 rgba(255,255,255,0.1) inset, 0 4px 24px rgba(0,4,18,0.7), 0 1px 3px rgba(0,4,18,0.5), 0 0 0 1px rgba(239,68,68,0.35), 0 0 32px rgba(239,68,68,0.1)'
+            ? `var(--shadow-level-2), 0 0 0 1px rgba(239,68,68,0.35), 0 0 32px rgba(239,68,68,0.1)`
             : isDragging
-              ? '0 0 0 1px rgba(255,255,255,0.06) inset, 0 1px 0 rgba(255,255,255,0.12) inset, 0 4px 24px rgba(0,4,18,0.7), 0 1px 3px rgba(0,4,18,0.5), 0 0 0 1px rgba(34,197,94,0.4), 0 0 48px rgba(34,197,94,0.12)'
-              : '0 0 0 1px rgba(255,255,255,0.06) inset, 0 1px 0 rgba(255,255,255,0.1) inset, 0 4px 24px rgba(0,4,18,0.7), 0 1px 3px rgba(0,4,18,0.5), 0 0 0 1px rgba(34,197,94,0.25), 0 0 32px rgba(34,197,94,0.07)',
+              ? `var(--shadow-level-2), 0 0 0 1px rgba(34,197,94,0.4), 0 0 48px rgba(34,197,94,0.12)`
+              : `var(--shadow-level-2), 0 0 0 1px rgba(34,197,94,0.25), 0 0 32px rgba(34,197,94,0.07)`,
         }),
       }}
     >
@@ -327,7 +327,7 @@ function UploadZone() {
         <svg
           key={rejectKey}
           className="w-8 h-8 upload-icon-shake"
-          style={{ color: '#ef4444' }}
+          style={{ color: 'var(--red)' }}
           viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden
         >
           <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636" />
@@ -346,7 +346,7 @@ function UploadZone() {
         <p
           className="text-sm font-medium m-0"
           style={{
-            color: isDragInvalid ? '#ef4444' : isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+            color: isDragInvalid ? 'var(--red)' : isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
             transition: 'color 220ms var(--ease-out-quart)',
           }}
         >
@@ -371,9 +371,9 @@ function UploadZone() {
 function OrDivider() {
   return (
     <div className="flex items-center gap-4 px-1">
-      <div className="flex-1" style={{ height: '1px', background: 'var(--border-dim)' }} />
+      <div className="flex-1 h-px bg-(--border-dim)" />
       <span className="font-(--font-mono) text-[10px] uppercase tracking-[0.2em] text-(--text-dim)">or</span>
-      <div className="flex-1" style={{ height: '1px', background: 'var(--border-dim)' }} />
+      <div className="flex-1 h-px bg-(--border-dim)" />
     </div>
   )
 }

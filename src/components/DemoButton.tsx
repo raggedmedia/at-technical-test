@@ -24,10 +24,9 @@ export function DemoButton({ onClick, variant = 'primary', arrow = false, childr
     <a
       href="#"
       onClick={e => { e.preventDefault(); onClick() }}
-      className="flex items-center gap-2 px-5 py-3.5 rounded-xl text-sm font-semibold text-white no-underline hover:brightness-110 transition-all duration-200"
+      className="flex items-center gap-2 px-5 py-3.5 rounded-xl text-sm font-semibold text-white no-underline hover:brightness-110 transition-all duration-200 bg-(--accent)"
       style={{
-        background: 'var(--accent)',
-        boxShadow: '0 8px 32px rgba(59,130,246,0.3), 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15)',
+        boxShadow: 'var(--shadow-btn-primary)',
         transitionTimingFunction: 'var(--ease-out-quart)',
       }}
     >

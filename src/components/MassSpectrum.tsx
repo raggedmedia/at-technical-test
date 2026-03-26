@@ -173,8 +173,7 @@ export function MassSpectrum({ spectrum, selectedPeak, onSelectPeak }: Props) {
 
   return (
     <div
-      className="flex flex-col gap-5 p-6 rounded-xl"
-      style={{ background: 'var(--bg-card)', border: '1px solid var(--border-dim)' }}
+      className="flex flex-col gap-5 p-6 rounded-xl bg-(--bg-card) border border-(--border-dim)"
     >
       {/* Header row */}
       <div className="flex items-center justify-between gap-4">

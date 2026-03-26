@@ -112,23 +112,6 @@ export function DatasetDetailPage() {
 
   const quality = computeQuality(dataset, spectrum)
 
-  // Processing state: no data to show yet
-  if (dataset.status === 'processing') {
-    return (
-      <div className="min-h-screen bg-(--bg-base)">
-        <DatasetNav filename={dataset.filename} status={dataset.status} flagReason={dataset.flagReason} failReason={dataset.failReason} />
-        <div className="flex flex-col items-center justify-center gap-4 py-40">
-          <div
-            className="w-8 h-8 rounded-full border-2 border-t-transparent"
-            style={{ borderColor: 'rgba(59,130,246,0.3)', borderTopColor: '#3b82f6', animation: 'spin 0.9s linear infinite' }}
-          />
-          <p className="text-sm text-(--text-secondary)">Parsing {dataset.filename}…</p>
-          <p className="text-xs text-(--text-dim)">This typically takes 2–5 minutes</p>
-        </div>
-      </div>
-    )
-  }
-
   // Failed state: minimal view — no spectrum or point cloud data
   if (dataset.status === 'failed') {
     return (
