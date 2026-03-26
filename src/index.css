@@ -90,6 +90,20 @@
   animation: float-upload 1.8s ease-in-out infinite;
 }
 
+/* Upload zone icon — rejection shake */
+@keyframes shake-icon {
+  0%, 100% { transform: translateX(0)    rotate(0deg);  }
+  15%       { transform: translateX(-5px) rotate(-6deg); }
+  30%       { transform: translateX(4px)  rotate(5deg);  }
+  50%       { transform: translateX(-4px) rotate(-4deg); }
+  65%       { transform: translateX(3px)  rotate(2deg);  }
+  80%       { transform: translateX(-2px) rotate(-1deg); }
+}
+
+.upload-icon-shake {
+  animation: shake-icon 0.5s var(--ease-spring) both;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
