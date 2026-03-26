@@ -1,11 +1,23 @@
 import type { DatasetQuality } from '../lib/quality'
+import type { FlagReason } from '../fixtures/datasets'
 
 interface Props {
   quality: DatasetQuality
 }
 
+const DEMO_EDGE = () => alert("You've reached the edge of the demo — this would open the remediation tool in the full product.")
+const DEMO_ARCHIVE = () => alert("You've reached the edge of the demo — this would archive the file in the real app.")
+const DEMO_SIMULATE = () => alert("You've reached the edge of the demo — this would open the simulation tool in the full product.")
+
+const FLAGGED_CTA_LABEL: Record<FlagReason, string> = {
+  'surface-contamination':    'Trim Surface Layer',
+  'reconstruction-artefacts': 'Adjust Reconstruction',
+  'unexpected-peak':          'Range Unknown Peak',
+}
+
 export function NextStepsFooter({ quality }: Props) {
   const clean = quality.status === 'clean'
+  const flaggedCta = quality.status === 'flagged' ? FLAGGED_CTA_LABEL[quality.reason] : null
 
   return (
     <footer className="px-8 pb-16">
@@ -33,7 +45,7 @@ export function NextStepsFooter({ quality }: Props) {
               {clean
                 ? 'Ready to simulate'
                 : quality.status === 'failed'
-                  ? 'Acquisition failed \u2014 re-run required'
+                  ? 'Acquisition failed \u2014 new specimen required'
                   : 'Review required before proceeding'}
             </span>
           </div>
@@ -44,39 +56,66 @@ export function NextStepsFooter({ quality }: Props) {
 
         <div className="flex items-end justify-between gap-4">
           <p className="text-[11px] text-(--text-dim) m-0 leading-relaxed max-w-xs">
-            The 3D atomic positions and element identities from this dataset seed the simulation
-            directly \u2014 no intermediate steps required.
+            {quality.status === 'flagged'
+              ? 'Resolve the flagged issue before this dataset can seed a simulation. Each flag type has a documented remediation path.'
+              : quality.status === 'failed'
+                ? 'This acquisition cannot be recovered. Archive the dataset and prepare a new specimen tip for re-acquisition.'
+                : 'The 3D atomic positions and element identities from this dataset seed the simulation directly \u2014 no intermediate steps required.'}
           </p>
           <div className="flex items-center gap-3 shrink-0">
-            <button
-              disabled={!clean}
-              className={[
-                'flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium border transition-all duration-200',
-                clean
-                  ? 'bg-transparent border-(--border-hi) text-(--text-secondary) cursor-pointer hover:bg-(--bg-card-hi) hover:border-(--accent) hover:text-(--text-primary)'
-                  : 'bg-transparent border-(--border-dim) text-(--text-dim) cursor-not-allowed opacity-30',
-              ].join(' ')}
-              style={{ transitionTimingFunction: 'var(--ease-out-quart)' }}
-            >
-              <span>Compare to Simulation</span>
-              <span className="opacity-50">\u2192</span>
-            </button>
-            <button
-              disabled={!clean}
-              className={[
-                'flex items-center gap-2 px-5 py-3.5 rounded-xl text-sm font-semibold border transition-all duration-200',
-                clean
-                  ? 'bg-(--accent) border-transparent text-white cursor-pointer hover:brightness-110'
-                  : 'bg-(--bg-base) border-(--border-dim) text-(--text-dim) cursor-not-allowed opacity-30',
-              ].join(' ')}
-              style={clean ? {
-                boxShadow: '0 8px 32px rgba(59,130,246,0.3), 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15)',
-                transitionTimingFunction: 'var(--ease-out-quart)',
-              } : {}}
-            >
-              <span>New Simulation from Dataset</span>
-              <span className="opacity-70">\u2192</span>
-            </button>
+            {quality.status === 'flagged' ? (
+              <a
+                href="#"
+                onClick={e => { e.preventDefault(); DEMO_EDGE() }}
+                className="flex items-center gap-2 px-5 py-3.5 rounded-xl text-sm font-semibold text-white no-underline hover:brightness-110 transition-all duration-200"
+                style={{
+                  background: 'var(--accent)',
+                  boxShadow: '0 8px 32px rgba(59,130,246,0.3), 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15)',
+                  transitionTimingFunction: 'var(--ease-out-quart)',
+                }}
+              >
+                <span>{flaggedCta}</span>
+                <span className="opacity-70">{'→'}</span>
+              </a>
+            ) : quality.status === 'failed' ? (
+              <a
+                href="#"
+                onClick={e => { e.preventDefault(); DEMO_ARCHIVE() }}
+                className="flex items-center gap-2 px-5 py-3.5 rounded-xl text-sm font-semibold text-white no-underline hover:brightness-110 transition-all duration-200"
+                style={{
+                  background: 'var(--accent)',
+                  boxShadow: '0 8px 32px rgba(59,130,246,0.3), 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15)',
+                  transitionTimingFunction: 'var(--ease-out-quart)',
+                }}
+              >
+                <span>Archive Dataset</span>
+              </a>
+            ) : (
+              <>
+                <a
+                  href="#"
+                  onClick={e => { e.preventDefault(); DEMO_SIMULATE() }}
+                  className="flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium border border-(--border-hi) bg-transparent text-(--text-secondary) no-underline hover:bg-(--bg-card-hi) hover:border-(--accent) hover:text-(--text-primary) transition-all duration-200"
+                  style={{ transitionTimingFunction: 'var(--ease-out-quart)' }}
+                >
+                  <span>Compare to Simulation</span>
+                  <span className="opacity-50">{'→'}</span>
+                </a>
+                <a
+                  href="#"
+                  onClick={e => { e.preventDefault(); DEMO_SIMULATE() }}
+                  className="flex items-center gap-2 px-5 py-3.5 rounded-xl text-sm font-semibold text-white no-underline hover:brightness-110 transition-all duration-200"
+                  style={{
+                    background: 'var(--accent)',
+                    boxShadow: '0 8px 32px rgba(59,130,246,0.3), 0 2px 8px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.15)',
+                    transitionTimingFunction: 'var(--ease-out-quart)',
+                  }}
+                >
+                  <span>New Simulation from Dataset</span>
+                  <span className="opacity-70">{'→'}</span>
+                </a>
+              </>
+            )}
           </div>
         </div>
       </div>

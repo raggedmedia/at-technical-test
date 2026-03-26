@@ -2,12 +2,14 @@ import type { SpectrumBin, AptDimensions } from './aptData'
 
 export type DatasetStatus = 'processing' | 'processed' | 'flagged' | 'failed'
 export type FlagReason = 'surface-contamination' | 'reconstruction-artefacts' | 'unexpected-peak'
+export type FailReason = 'specimen-fracture' | 'voltage-spike' | 'vacuum-loss'
 
 export interface Dataset {
   id: string
   filename: string
   status: DatasetStatus
   flagReason?: FlagReason
+  failReason?: FailReason
   uploadedAt: string
   material: string
   atomCount: number
@@ -136,6 +138,7 @@ export const DATASETS: Dataset[] = [
     id: 'fe-steel-nuclear',
     filename: 'fe-steel-nuclear.epos',
     status: 'failed',
+    failReason: 'specimen-fracture',
     uploadedAt: '2026-03-22T14:30:00Z',
     material: 'Fe Steel',
     atomCount: 182000,
