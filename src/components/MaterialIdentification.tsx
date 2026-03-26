@@ -92,16 +92,11 @@ export function MaterialIdentification({ spectrum, totalAtoms, quality }: Props)
           </p>
 
           <div
-            className="flex flex-col rounded-lg overflow-hidden"
-            style={{ border: '1px solid var(--border-hi)' }}
+            className="flex flex-col rounded-lg overflow-hidden border border-(--border-hi)"
           >
             <div
-              className="grid gap-4 px-4 py-2.5"
-              style={{
-                gridTemplateColumns: '2fr 3fr 2fr 2fr 3fr',
-                background: 'var(--bg-card-hi)',
-                borderBottom: '1px solid var(--border-hi)',
-              }}
+              className="grid gap-4 px-4 py-2.5 bg-(--bg-card-hi) border-b border-(--border-hi)"
+              style={{ gridTemplateColumns: '2fr 3fr 2fr 2fr 3fr' }}
             >
               {['Ion', 'Element', 'Peak m/z', 'Ion Count', 'Note'].map(h => (
                 <p key={h} className="font-(--font-mono) text-[10px] uppercase tracking-[0.15em] text-(--text-dim) m-0">{h}</p>
