@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { DATASETS } from '../fixtures/datasets'
-import type { Dataset, DatasetStatus, FlagReason } from '../fixtures/datasets'
+import type { Dataset, DatasetStatus, FailReason } from '../fixtures/datasets'
 import { computeQuality } from '../lib/quality'
-import type { DatasetQuality } from '../lib/quality'
+import { StatusBadge } from '../components/StatusBadge'
 
 // ─── Formatting ───────────────────────────────────────────────────────────────
 
@@ -16,52 +16,6 @@ function formatCount(n: number): string {
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-}
-
-// ─── Status chip ──────────────────────────────────────────────────────────────
-
-const STATUS_LABELS: Record<DatasetStatus, string> = {
-  processed:  'Processed',
-  processing: 'Processing',
-  flagged:    'Flagged',
-  failed:     'Failed',
-}
-
-const FLAG_REASON_LABELS: Record<FlagReason, string> = {
-  'surface-contamination':    'Surface oxide',
-  'reconstruction-artefacts': 'Artefacts',
-  'unexpected-peak':          'Unknown peak',
-}
-
-function StatusChip({ dataset, quality }: { dataset: Dataset; quality: DatasetQuality }) {
-  const isPulsing = dataset.status === 'processing'
-  return (
-    <div className="flex items-center gap-2">
-      <div
-        className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium w-fit whitespace-nowrap"
-        style={{
-          background: `${quality.accentColor}18`,
-          border: `1px solid ${quality.accentColor}38`,
-          color: quality.accentColor,
-          animation: isPulsing ? 'pulse 1.4s ease-in-out infinite' : undefined,
-        }}
-      >
-        <span
-          className="w-1.5 h-1.5 rounded-full shrink-0"
-          style={{
-            background: quality.accentColor,
-            boxShadow: !isPulsing ? `0 0 5px ${quality.accentColor}` : undefined,
-          }}
-        />
-        {STATUS_LABELS[dataset.status]}
-      </div>
-      {dataset.flagReason && (
-        <span className="text-[11px] whitespace-nowrap" style={{ color: `${quality.accentColor}99` }}>
-          {FLAG_REASON_LABELS[dataset.flagReason]}
-        </span>
-      )}
-    </div>
-  )
 }
 
 // ─── Sort ─────────────────────────────────────────────────────────────────────
@@ -215,7 +169,7 @@ function DatasetTable({ datasets }: { datasets: Dataset[] }) {
 
               {/* Status chip */}
               <td className="px-4 py-3">
-                <StatusChip dataset={dataset} quality={quality} />
+                <StatusBadge status={dataset.status} flagReason={dataset.flagReason} failReason={dataset.failReason} accentColor={quality.accentColor} />
               </td>
 
               {/* Material — blank for processing rows */}
