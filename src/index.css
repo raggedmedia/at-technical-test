@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* ── Colour ─────────────────────────────────────────── */
+  /* - Colour --------------------------- */
   --bg-base: #141720;
   --bg-card: #1b1f2e;
   --bg-card-hi: #222638;
@@ -18,24 +18,23 @@
   --green: #22c55e;
   --red: #ef4444;
 
-  /* ── Typography ─────────────────────────────────────── */
+  /* - Typography ------------------------ */
   --font-sans: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, 'Cascadia Code', monospace;
 
-  /* ── Easing ─────────────────────────────────────────── */
-  /* Objects have mass. They ease out — not linearly. */
+  /* - Easing --------------------------------- */
+  /* Objects have mass. They ease out - not linearly. */
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   /* Spring: overshoots slightly, settles back. Used for physical toggles. */
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* ── Elevation / Shadow ─────────────────────────────── */
+  /* - Elevation / Shadow ------------------------ */
   /*
-   * Three levels — each raises the top-edge inset highlight, simulating
-   * a light source above. The deeper the shadow, the higher the element.
-   * Level 1: Subtle — stat cards, table rows.
-   * Level 2: Standard — section cards.
-   * Level 3: Elevated — primary CTA, hovered cards.
-   * btn-primary: Level 3 + accent-coloured glow — primary CTA buttons.
+   * Level 1: Subtle - stat cards, table rows.
+   * Level 2: Standard - section cards (.card).
+   * Level 3: Elevated - primary CTA, hovered cards (.card-elevated).
+   * btn-primary: Level 3 + accent glow - primary CTA buttons.
+   * row-hover: Top/bottom bevel only - table row hover state.
    */
   --shadow-level-1:
     0 0 0 1px rgba(255, 255, 255, 0.04) inset,
@@ -59,46 +58,13 @@
     0 8px 32px rgba(59, 130, 246, 0.3),
     0 2px 8px rgba(0, 0, 0, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, 'Cascadia Code', monospace;
 
-  /* ── Easing ─────────────────────────────────────────── */
-  /* Objects have mass. They ease out — not linearly. */
-  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-  /* Spring: overshoots slightly, settles back. Used for physical toggles. */
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-
-  /* ── Elevation / Shadow ─────────────────────────────── */
-  /*
-   * Three levels — each raises the top-edge inset highlight, simulating
-   * a light source above. The deeper the shadow, the higher the element.
-   * Level 1: Subtle — stat cards, table rows.
-   * Level 2: Standard — section cards.
-   * Level 3: Elevated — primary CTA, hovered cards.
-   */
-  --shadow-level-1:
-    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
-    0 1px 0 rgba(255, 255, 255, 0.06) inset,
-    0 2px 8px rgba(0, 4, 18, 0.55),
-    0 1px 2px rgba(0, 4, 18, 0.4);
-
-  --shadow-level-2:
-    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
-    0 1px 0 rgba(255, 255, 255, 0.08) inset,
-    0 4px 24px rgba(0, 4, 18, 0.7),
-    0 1px 3px rgba(0, 4, 18, 0.5);
-
-  --shadow-level-3:
-    0 0 0 1px rgba(255, 255, 255, 0.06) inset,
-    0 1px 0 rgba(255, 255, 255, 0.12) inset,
-    0 8px 32px rgba(0, 4, 18, 0.8),
-    0 2px 8px rgba(0, 4, 18, 0.6);
+  --shadow-row-hover:
+    0 1px 0 rgba(255, 255, 255, 0.13) inset,
+    0 -1px 0 rgba(255, 255, 255, 0.03) inset;
 }
 
-/* ── Keyframes ────────────────────────────────────────── */
+/* - Keyframes --------------------------------- */
 
 /* Content rising into view after data loads */
 @keyframes fadeInUp {
@@ -118,7 +84,7 @@
   to   { width: var(--bar-width); }
 }
 
-/* Upload zone icon — gentle levitation on hover */
+/* Upload zone icon - gentle levitation on hover */
 @keyframes float-upload {
   0%, 100% { transform: translateY(0); }
   50%       { transform: translateY(-5px); }
@@ -128,7 +94,7 @@
   animation: float-upload 1.8s ease-in-out infinite;
 }
 
-/* Upload zone icon — rejection shake */
+/* Upload zone icon - rejection shake */
 @keyframes shake-icon {
   0%, 100% { transform: translateX(0)    rotate(0deg);  }
   15%       { transform: translateX(-5px) rotate(-6deg); }
@@ -155,15 +121,12 @@ html {
 body {
   margin: 0;
   padding: 0;
-}
-
-body {
   background: var(--bg-base);
   color: var(--text-primary);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Subtle noise — screens are sterile; physical surfaces aren't */
+  /* Subtle noise - screens are sterile; physical surfaces aren't */
   position: relative;
 }
 
@@ -185,6 +148,8 @@ body::before {
   z-index: 1;
 }
 
+/* - Card tiers ---------------------------------------- */
+
 .card {
   background: var(--bg-card);
   border: 1px solid var(--border-dim);
@@ -194,6 +159,19 @@ body::before {
   background-image: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0.025) 0px,
+    transparent 48px
+  );
+}
+
+/* Same as .card but shadow-level-3 - for primary CTA footers, modals */
+.card-elevated {
+  background: var(--bg-card);
+  border: 1px solid var(--border-dim);
+  box-shadow: var(--shadow-level-3);
+  border-radius: 12px;
+  background-image: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.035) 0px,
     transparent 48px
   );
 }
