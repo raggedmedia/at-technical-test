@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { DATASETS } from '../fixtures/datasets'
 import type { Dataset, DatasetStatus, FailReason } from '../fixtures/datasets'
@@ -220,33 +220,117 @@ function DatasetTable({ datasets }: { datasets: Dataset[] }) {
   )
 }
 
-// ─── Empty state ──────────────────────────────────────────────────────────────
+// ─── Upload zone ──────────────────────────────────────────────────────────────
 
-function EmptyState() {
+function UploadZone() {
+  const [isDragging, setIsDragging] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const isActive = isDragging || isHovered
+
+  function handleDragOver(e: React.DragEvent) {
+    e.preventDefault()
+    setIsDragging(true)
+  }
+
+  function handleDragLeave(e: React.DragEvent) {
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      setIsDragging(false)
+    }
+  }
+
+  function handleDrop(e: React.DragEvent) {
+    e.preventDefault()
+    setIsDragging(false)
+    setIsHovered(false)
+    alert("You've reached the edge of the demo — in the real app this file would begin processing.")
+  }
+
+  function handleFileChange() {
+    if (inputRef.current?.files?.length) {
+      alert("You've reached the edge of the demo — in the real app this file would begin processing.")
+      inputRef.current.value = ''
+    }
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center py-32 px-8">
-      <div
-        className="flex flex-col items-center gap-6 p-12 rounded-2xl w-full max-w-sm border-2 border-dashed border-(--border-dim) hover:border-(--border-hi) transition-colors duration-200"
+    <div
+      id="upload-zone"
+      role="button"
+      tabIndex={0}
+      aria-label="Upload .epos file"
+      onClick={() => inputRef.current?.click()}
+      onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); inputRef.current?.click() } }}
+      onDragOver={handleDragOver}
+      onDragEnter={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="card flex flex-col items-center justify-center gap-4 py-16 cursor-pointer select-none outline-none"
+      style={{
+        transition: 'border-color 220ms var(--ease-out-quart), box-shadow 220ms var(--ease-out-quart), background-color 220ms var(--ease-out-quart)',
+        ...(isActive && {
+          borderColor: isDragging ? 'var(--green)' : 'rgba(34, 197, 94, 0.45)',
+          backgroundColor: 'var(--bg-card-hi)',
+          backgroundImage: 'linear-gradient(to bottom, rgba(34, 197, 94, 0.045) 0px, transparent 80px)',
+          boxShadow: isDragging
+            ? '0 0 0 1px rgba(255,255,255,0.06) inset, 0 1px 0 rgba(255,255,255,0.12) inset, 0 4px 24px rgba(0,4,18,0.7), 0 1px 3px rgba(0,4,18,0.5), 0 0 0 1px rgba(34,197,94,0.4), 0 0 48px rgba(34,197,94,0.12)'
+            : '0 0 0 1px rgba(255,255,255,0.06) inset, 0 1px 0 rgba(255,255,255,0.1) inset, 0 4px 24px rgba(0,4,18,0.7), 0 1px 3px rgba(0,4,18,0.5), 0 0 0 1px rgba(34,197,94,0.25), 0 0 32px rgba(34,197,94,0.07)',
+        }),
+      }}
+    >
+      <input
+        ref={inputRef}
+        type="file"
+        accept=".epos"
+        className="sr-only"
+        onChange={handleFileChange}
+        onClick={e => e.stopPropagation()}
+      />
+
+      {/* Icon — floats continuously while zone is active */}
+      <svg
+        className={`w-8 h-8 transition-colors duration-220${isActive ? ' upload-icon-float' : ''}`}
+        style={{ color: isActive ? 'var(--green)' : 'var(--text-dim)' }}
+        viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden
       >
-        <svg viewBox="0 0 1252.14 1211.68" className="w-10 h-10 opacity-15" aria-hidden>
-          <g transform="translate(125.214, 121.168) scale(0.8)">
-            <path fill="white" d="M1201.58,365.22c0-28.91-23.43-52.34-52.34-52.34-27.37,0-49.8,21.02-52.11,47.79l-448.33,70.25c-5.53-22.97-26.16-40.06-50.83-40.06-12.36,0-23.71,4.31-32.66,11.48l-260.32-251.81c3.92-7.34,6.16-15.72,6.16-24.62,0-28.91-23.43-52.34-52.34-52.34s-52.34,23.43-52.34,52.34c0,17.93,9.03,33.74,22.77,43.17l-124.93,351.45c-.47-.01-.93-.07-1.4-.07-28.91,0-52.34,23.43-52.34,52.34s23.43,52.34,52.34,52.34c8.29,0,16.09-1.98,23.06-5.41l321.11,435.05c-6.06,8.54-9.66,18.95-9.66,30.22,0,28.91,23.43,52.34,52.34,52.34s49.99-21.22,52.13-48.16l433.91-235.09c8.97,7.21,20.35,11.55,32.75,11.55,28.91,0,52.34-23.43,52.34-52.34,0-17.68-8.8-33.29-22.22-42.76l110.67-352.98c28.87-.04,52.26-23.45,52.26-52.34ZM586.63,494.27c3.65.81,7.44,1.27,11.34,1.27,23.47,0,43.33-15.45,49.97-36.73l425.52-66.68-639.5,331.74,152.68-229.6ZM286.15,170.47l262.88,254.28c-2.17,5.74-3.41,11.94-3.41,18.45,0,15.09,6.42,28.65,16.64,38.2l-152.84,229.84c-4.2-1.38-8.64-2.2-13.23-2.46l-113.67-536.26c1.24-.63,2.44-1.32,3.62-2.05ZM130.59,528.44l124.55-350.38c.18.01.37.02.55.03l113.68,536.29c-3.65,1.87-7.06,4.14-10.15,6.78l-205.03-137.81c.7-3.41,1.06-6.94,1.06-10.55,0-18.73-9.87-35.11-24.65-44.36ZM160.91,620.92l182.83,122.89c-1.87,5.38-2.94,11.14-2.94,17.16,0,28.91,23.43,52.34,52.34,52.34.47,0,.92-.06,1.38-.07l65.26,212.61-298.88-404.93ZM536.25,1061.05c-8.58-16.62-25.78-28.04-45.7-28.34l-69.44-227.55c9.62-6.1,17.09-15.24,21.09-26.08l516.64,50.6c.23.68.49,1.35.74,2.02l-423.33,229.36ZM1012.84,761.18c-1.42-.12-2.86-.22-4.31-.22-25.01,0-45.9,17.56-51.08,41.02l-512.83-50.23c-.14-.77-.28-1.54-.45-2.29l668.53-346.8c3.04,2.96,6.45,5.54,10.13,7.7l-110,350.82Z"/>
-          </g>
-        </svg>
-        <div className="flex flex-col items-center gap-1.5 text-center">
-          <p className="text-sm font-medium text-(--text-primary) m-0">No datasets yet</p>
-          <p className="text-[13px] text-(--text-dim) m-0 leading-relaxed">Upload an .epos file to begin<br />atom probe reconstruction</p>
-        </div>
-        <button
-          className="flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-(--accent) text-white cursor-pointer transition-all duration-200 hover:brightness-110 border-0"
-          style={{ boxShadow: '0 8px 24px rgba(59,130,246,0.35), inset 0 1px 0 rgba(255,255,255,0.12)' }}
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+      </svg>
+
+      <div className="flex flex-col items-center gap-1.5 text-center">
+        <p
+          className="text-sm font-medium m-0"
+          style={{
+            color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+            transition: 'color 220ms var(--ease-out-quart)',
+          }}
         >
-          <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none" aria-hidden>
-            <path d="M8 2v9M4 7l4 4 4-4M3 13h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          Upload .epos file
-        </button>
+          {isDragging ? 'Release to upload' : 'Drop an .epos file'}
+        </p>
+        <p
+          className="text-[12px] m-0"
+          style={{
+            color: isActive ? 'rgba(34, 197, 94, 0.65)' : 'var(--text-dim)',
+            transition: 'color 220ms var(--ease-out-quart)',
+          }}
+        >
+          or click to browse
+        </p>
       </div>
+    </div>
+  )
+}
+
+// ─── Or divider ───────────────────────────────────────────────────────────────
+
+function OrDivider() {
+  return (
+    <div className="flex items-center gap-4 px-1">
+      <div className="flex-1" style={{ height: '1px', background: 'var(--border-dim)' }} />
+      <span className="font-(--font-mono) text-[10px] uppercase tracking-[0.2em] text-(--text-dim)">or</span>
+      <div className="flex-1" style={{ height: '1px', background: 'var(--border-dim)' }} />
     </div>
   )
 }
@@ -266,28 +350,33 @@ export function DatasetsPage() {
             <h1 className="text-xl font-semibold text-(--text-primary) m-0">Datasets</h1>
           </div>
           {!isEmpty && (
-            <button
-              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] text-(--text-dim) border border-(--border-dim) bg-transparent hover:text-(--text-secondary) hover:border-(--border-hi) transition-all duration-150 cursor-pointer"
+            <a
+              href="#upload-zone"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] text-(--text-dim) border border-(--border-dim) no-underline hover:text-(--text-secondary) hover:border-(--border-hi) transition-all duration-150"
               style={{ transitionTimingFunction: 'var(--ease-out-quart)' }}
             >
               <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" aria-hidden>
                 <path d="M8 2v9M4 7l4 4 4-4M3 13h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               Upload .epos
-            </button>
+            </a>
           )}
         </div>
       </header>
 
       <main className="max-w-300 mx-auto">
         {isEmpty ? (
-          <EmptyState />
+          <div className="px-8 py-12">
+            <UploadZone />
+          </div>
         ) : (
-          <div className="px-8 py-6">
+          <div className="px-8 py-6 flex flex-col gap-6">
             {/* Tier 3: table card — elevated off the page base */}
             <div className="card overflow-hidden">
               <DatasetTable datasets={DATASETS} />
             </div>
+            <OrDivider />
+            <UploadZone />
           </div>
         )}
       </main>

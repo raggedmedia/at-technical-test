@@ -80,6 +80,16 @@
   to   { width: var(--bar-width); }
 }
 
+/* Upload zone icon — gentle levitation on hover */
+@keyframes float-upload {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+
+.upload-icon-float {
+  animation: float-upload 1.8s ease-in-out infinite;
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
