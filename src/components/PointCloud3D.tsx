@@ -101,7 +101,7 @@ export function PointCloud3D({ atoms, loading, selectedPeak, onSelectPeak }: Pro
 
   return (
     <section className="flex flex-col gap-3">
-      <StepLabel n="03" title="Reconstruction Geometry" />
+      <StepLabel n="02" title="Reconstruction Geometry" />
       <div className="card flex flex-col gap-4 p-5">
       <div className="h-130 rounded-lg overflow-hidden relative">
         {loading ? (
