@@ -1,10 +1,4 @@
-import confetti from 'canvas-confetti'
-
-// Colors pulled from the app's design tokens
-const COLORS = ['#3b82f6', '#22c55e', '#a78bfa', '#f59e0b', '#ec4899', '#e8eaf0']
-
 // Module-level state so cancelDemoEdge() can clean up from anywhere
-let activeCanvas: HTMLCanvasElement | null = null
 let activeToast: HTMLDivElement | null = null
 const activeTimers: ReturnType<typeof setTimeout>[] = []
 
@@ -16,11 +10,6 @@ function track(id: ReturnType<typeof setTimeout>) {
 export function cancelDemoEdge() {
   // Clear all pending timers
   activeTimers.splice(0).forEach(clearTimeout)
-  // Remove the canvas from DOM — every particle disappears instantly
-  if (activeCanvas) {
-    activeCanvas.remove()
-    activeCanvas = null
-  }
   // Dismiss toast without animation
   if (activeToast) {
     activeToast.remove()
@@ -28,41 +17,9 @@ export function cancelDemoEdge() {
   }
 }
 
-// Toast fades out at 3000ms — same time the last confetti hits the floor
 export function demoEdge(label = "You've reached the edge of the demo") {
   // Cancel any in-flight demo before starting a fresh one
   cancelDemoEdge()
-
-  // ── Dedicated canvas for confetti ───────────────────────────────────────
-  // Owning the canvas means cancel = canvas.remove(), instant & reliable
-  const canvas = document.createElement('canvas')
-  activeCanvas = canvas
-  Object.assign(canvas.style, {
-    position: 'fixed', inset: '0',
-    width: '100%', height: '100%',
-    pointerEvents: 'none', zIndex: '9998',
-  })
-  document.body.appendChild(canvas)
-  const fire = confetti.create(canvas, { resize: true, useWorker: false })
-
-  // ── Confetti bursts ──────────────────────────────────────────────────────
-  fire({ particleCount: 160, spread: 80, origin: { y: 0.6 }, colors: COLORS, disableForReducedMotion: true })
-  track(setTimeout(() => {
-    fire({ particleCount: 70, angle: 60,  spread: 65, origin: { x: 0.1, y: 0.65 }, colors: COLORS, disableForReducedMotion: true })
-    fire({ particleCount: 70, angle: 120, spread: 65, origin: { x: 0.9, y: 0.65 }, colors: COLORS, disableForReducedMotion: true })
-  }, 150))
-  track(setTimeout(() => {
-    fire({ particleCount: 60, spread: 100, origin: { y: 0.55 }, colors: COLORS, disableForReducedMotion: true, gravity: 0.6 })
-  }, 600))
-  track(setTimeout(() => {
-    fire({ particleCount: 40, spread: 120, origin: { y: 0.5 }, colors: COLORS, disableForReducedMotion: true, gravity: 0.4, scalar: 0.8 })
-  }, 1200))
-
-  // Clean up canvas after particles have settled
-  track(setTimeout(() => {
-    canvas.remove()
-    if (activeCanvas === canvas) activeCanvas = null
-  }, 3600))
 
   // ── Toast ────────────────────────────────────────────────────────────────
   const toast = document.createElement('div')
