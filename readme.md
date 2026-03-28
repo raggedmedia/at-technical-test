@@ -88,3 +88,9 @@ I chose to use React over Vue simply because I have more familiarity with it and
 
 ### A Little Bit of Three.js
 I didn't want to get too lost in the weeds of 3D rendering for this `.epos` file, as trying to build a fully optimised renderer could have easily consumed the entire eight hours. But I did want to demonstrate at least some Three.js and WebGL competency, so I included the 3D point cloud on the detail view. It renders a 50k point sample cleanly using a `Float32Array` buffer geometry, keeping it to a single draw call at 60fps.
+
+---
+
+## Thanks for Your Time
+
+Lastly, I've done a few technical tests over the last couple of years and this was genuinely the best one. Paying for the time and actively encouraging LLM use meant the process felt like real work, not a performance. Learning more about atom probe tomography and getting to use my skills to make (hopefully) sensible front-end decisions was a bonus. I thoroughly enjoyed it. Thank you.
