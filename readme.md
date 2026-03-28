@@ -1,151 +1,90 @@
 # APT Data Explorer
 
-A first-look dashboard for Atom Probe Tomography data, built as a technical test for Atomic Tessellator.
+A dataset management and analysis platform for Atom Probe Tomography data, built as a technical test for Atomic Tessellator.
 
 ---
 
 ## How to Run
 
 ```bash
-# 1. Parse the raw data (one-time, ~60 seconds)
-python3 parse_epos.py
-
-# 2. Install dependencies
+# Install dependencies
 pnpm install
 
-# 3. Start the dev server
+# Start the dev server
 pnpm dev
 ```
 
-Open `http://localhost:5173`. The app fetches `public/data/summary.json` (header stats, mass spectrum) immediately on load, then lazily fetches `public/data/atoms.json` (50k point cloud atoms) in the background.
+Open `http://localhost:5173`.
 
+The parsed data files for the provided `epos` file (`public/data/summary.json` and `public/data/atoms.json`) are already committed to the repo. No setup beyond `pnpm install` is needed.
 ---
 
-## What is an `.epos` File?
+## What is this?
 
-An `.epos` (Extended Position) file is the primary output format from an Atom Probe Tomography instrument. The machine evaporates individual atoms off a needle-sharp material sample one by one using high-voltage pulses, detects each atom hitting a 2D detector, and records:
+Hi Alain and Daniel,
 
-- **X, Y, Z** — 3D position of each atom in the material (nanometres)
-- **m/z** — mass-to-charge ratio (Daltons) — identifies which element the atom is
+What I decided to do for the technical test was present a data management and review app.
 
-Each ion record is **44 bytes** (11 × 32-bit big-endian floats). This file is 276MB: roughly **6.6 million individual atoms** from a real Fe-Ni alloy sample.
+I operated under the assumption that an `.epos` (Extended Position) file is the primary output from an Atom Probe Tomography instrument, and that APT data moves through a defined scientific workflow:
 
-This is how Atomic Tessellator discovered the rare-earth magnet substitute described on their website. This is real data.
-
----
-
-## The Product Decision: Why Step 2?
-
-The scientific workflow for APT data is:
-
-1. Physical experiment (already done — this is the `.epos` file)
-2. **Ingest and first look** ← this app
-3. Range the data (assign definitive element identities to m/z peaks)
+1. Physical experiment (already done)
+2. **Ingest and first look** (this app)
+3. Range the data: assign definitive element identities to m/z peaks
 4. Analyse or simulate
 
-I built Step 2 deliberately, not by default.
+Approaching it from the point of view of a scientist using the Atomic Tessellator platform, I assumed they have already done the physical experiment (resulting in the `atom_probe_tomography_data-public.epos` file). They now want to ingest it into the simulation app, confirm the results of the experiment, and use that as a reliable baseline before comparing to existing simulations or running new ones.
 
-A 3D WebGL renderer of 6.6 million points is the obvious impressive-looking choice. It is also the wrong one. A researcher loading a fresh dataset does not need to orbit atoms — they need to answer three questions in under 30 seconds:
+## What's in the Demo
 
-1. **Did the acquisition work?** (ion count, acquisition quality badge)
-2. **What material is this?** (automated element identification from mass spectrum)
-3. **Is the reconstruction credible?** (3D point cloud shape — should be a circular needle cross-section)
+There are two main parts to the demo.
 
-Only once those questions are answered does ranging and simulation make sense. The app is designed around that decision sequence, not around the data.
+### 1. Dataset Homescreen
+The home screen is a sortable dataset table showing different state options for uploaded files. Assuming that there must be plenty of times where experiments fail or only partially succeed, it felt important to show what different scenarios look like:
 
-The step labels (01 / 02 / 03) are deliberate — they show the user where they are in a larger workflow and prime the "Range this Dataset" action as the obvious next move.
+1. A correct, clean experiment (`atom_probe_tomography_data-public.epos`).
+2. Experiments that worked but have issues like surface contamination, reconstruction artefacts, or unexpected peaks.
+3. Outright failed acquisitions.
 
----
+Additionally, assuming a scientist would upload an `.epos` file that is then processed and parsed in the cloud before review, we needed to show a 'processing' state.
 
-## Design Philosophy
+I also handled the small UI states for the upload CTA, such as rejecting non-`.epos` files if a user drags and drops the wrong item, as well as showing an [empty state if there were no previous uploads](http://localhost:5173/?empty`).
 
-The job description asks for someone with *exceptional taste* who can *champion that taste internally*. This section explains what I mean by taste and how it manifests in the specific decisions in this dashboard.
+### 2. Dataset Detail Screen
+Visit [http://localhost:5173/dataset/apt-real](http://localhost:5173/dataset/apt-real) for the primary view.
 
-### Physics of the UI
+Assuming a successful APT experiment, the main purpose of this screen is to review and validate the data before proceeding with simulations. After a lot of back and forth researching with Claude, I determined the key questions the UI needs to answer immediately:
 
-Digital interfaces feel untrustworthy when they behave in ways that nothing physical ever does: things that appear instantly with no duration, objects that are indistinguishable by depth or weight, surfaces with no texture.
+1. Did the acquisition work? (Total ion count, acquisition quality badge)
+2. What material is this? (Material identification table and mass spectrum)
+3. Is the reconstruction credible? (3D point cloud: the needle reconstruction should look physically correct)
 
-**What this looks like in practice:**
-
-- **Easing with mass.** The hero ion count (6,596,033) animates in over 1.2 seconds using a quartic ease-out — the number decelerates as it lands, like something arriving with momentum. `cubic-bezier(0.25, 1, 0.5, 1)`. The alternative — the number just appearing — implies no computation happened.
-
-- **Spring physics on the toggle.** The Log/Linear scale toggle uses a sliding pill with `cubic-bezier(0.34, 1.56, 0.64, 1)` — it slightly overshoots and settles back. This is not decoration. The overshoot communicates that the object has mass and that a real state change occurred. A colour-swap communicates nothing physical.
-
-- **Staggered entrance.** Each section (01, 02, 03) slides into view 120ms after the previous. The page doesn't arrive all at once; it loads in sequence, the same way a human would read it.
-
-### Elevation and Lighting
-
-Every surface in the physical world sits at a height. Light comes from above. The things closest to you cast the deepest shadows and catch the most light on their top edge.
-
-The design system has three shadow levels. The distinguishing detail in each is the `inset 0 1px 0 rgba(255,255,255,N)` — the top-edge highlight that only exists if there is a light source above the object. Level 3 is reserved for the primary CTA, which should be the most physically prominent element on the page. Hierarchy should be legible with your eyes half-closed.
-
-The `.card` class has a `linear-gradient(to bottom, rgba(255,255,255,0.025) 0px, transparent 48px)` baked in — the inner face of a 3D box catching overhead light.
-
-Stat cards lift 2px on hover with a deeper shadow. They feel like objects you can pick up.
-
-### Texture
-
-Flat #0f1117 backgrounds feel synthetic. Screens are smooth; physical surfaces are not. A 3% SVG `feTurbulence` noise layer on the body breaks the sterility without being visible at a glance — you feel it more than see it. This is the same instinct that makes matte finishes feel premium over glossy ones.
-
-### Micro-interactions as Honest Feedback
-
-Every user action should produce an immediate, proportionate physical response.
-
-- **Peak bars animate into view** on mount with staggered delays (60ms per row) — the data visibly "arrives" rather than being pre-rendered. The animation is not decoration; it's honest feedback that the spectrum was computed.
-
-- **Table rows slide forward 3px** on hover, with a left accent border. The row you're examining moves toward you, like picking something up.
-
-- **The 3D point cloud hint** ("Left-drag to orbit") fades out 3 seconds after loading and disappears on first interaction. It exists only when it's needed. After that, it would be noise.
-
-- **Arrow icons on CTAs shift right 4px** on hover with spring easing. The directional affordance responds to your intent before you click.
-
-### What "Good" Looks Like at a Glance
-
-Before any pixel-level decisions: the page should pass the squint test. Half-close your eyes. The primary action (Range this Dataset) should be the brightest, most elevated thing on the page. The secondary action (Compare to Simulation) should be clearly subordinate. Everything else should recede.
-
-Shadow depth = elevation = importance. Not colour, not size alone — depth.
+### Review and Fail States
+The detail pages for the flagged and failed dataset states show different versions of the above. They specifically call out what the issues with the files are and surface different actions depending on the error.
 
 ---
 
-## Architecture Decisions
+## Behind the Scenes
 
-**Python for parsing.** 276MB parsed client-side is unusable — 30+ seconds to load, blocks the main thread, crashes mobile. Python runs once as a build step, writes two small JSON files, and never runs again in production. This is how a real pipeline would work.
+### The Python Parser
+You'll see a `parse_epos.py` script. I wrote this to get the raw data out of the binary format so the UI had something real to render. The parsed output (`public/data/summary.json` and `public/data/atoms.json`) is already committed, so you don't need to run it.
 
-**Big-endian detection.** LEAP instruments write big-endian IEEE 754 floats. The parser detects this empirically (20/20 plausibility test on first records) rather than hardcoding, which means it would handle little-endian instruments without modification.
+In a real application I'd expect this kind of bulk parsing to happen on a backend worker after upload. It's outside the scope of what I'm demonstrating here, but it was a necessary step to make the frontend functional with actual data rather than fixtures.
 
-**Three.js for the point cloud, not Canvas.** The original implementation used an HTML5 Canvas 2D projection (XY only). I replaced it with `@react-three/fiber` + `OrbitControls` because APT data is 3D — the needle depth (Z axis) is scientifically meaningful. A 2D projection loses it entirely. The `Float32Array` buffer geometry approach renders 49k atoms in a single draw call at 60fps.
+### AI Use
+I used Claude Sonnet via Github Copilot extensively as a pair programmer. It was incredibly useful for helping me walk through what an `.epos` file actually is, what an APT workflow looks like, and what information is likely to be important to researchers using the AT software.
 
-**Recharts for the mass spectrum.** The spectrum is 2000 bins of real data. Recharts handles the axis domain, log/linear toggle state, and reference line annotations without requiring custom SVG math. The log scale is the default — scientists always use log for APT mass spectra because the Fe²⁺ peak at 28 Da (16% of all ions) would visually obliterate every minor peak on a linear scale.
+I have tried my best to validate its outputs, like ensuring the most important metric on the detail screen is the total ion (not atom) count. Hopefully there aren't too many LLM hallucinations sneaking through the science. I leave it to you both to confirm how close or far off the domain logic landed.
 
-**No inline styles (almost).** Tailwind v4 CSS variable syntax (`text-(--var)`) throughout. The two exceptions are dynamic values that must be computed at runtime (the sliding pill position, the bar animation width via `--bar-width` custom property) — these use `style={{}}` only where a static class cannot express the value.
+### Design Philosophy
+For this demo I wanted to focus on the interaction design and UI finish, focusing on details such as:
+- **Logical user flows:** The UI should feel 'inevitable.' The path a user takes is logical, frictionless, and intuitive.
+- **Immediate feedback:** The interface always responds instantly.
+- **State changes:** Deliberate handling of default, hover, active, disabled, loading, and error states.
+- **Micro-interactions:** Treating the app as a physical object under a light source. Using light and spacing to create depth, and using that depth to create visual hierarchy.
+- **Physics:** Making sure the design has mass, weight, and a bit of personality.
 
-**No ranging UI.** Step 3 (letting the user assign element identities to m/z peaks) is another full day of work done properly: drag-to-select peak ranges, element assignment modal, composition table. The `MaterialIdentification` component makes automated guesses from known APT signatures and explicitly labels them as such. The `NextStepsFooter` explains what ranging is and gates the CTA on acquisition quality. This is the honest MVP boundary.
+### React, Not Vue
+I chose to use React over Vue simply because I have more familiarity with it and could move significantly faster. The high level concepts and patterns should translate cleanly between the two.
 
----
-
-## AI Workflow
-
-This was built with GitHub Copilot (Claude Sonnet) as a pair programmer, used honestly:
-
-**What the AI did well:** scaffolding the Vite project structure, writing the Python binary parser (big-endian struct format, endian detection), generating Recharts boilerplate, TypeScript interface definitions, and CSS keyframe animation syntax.
-
-**Where I directed and corrected it:**
-- The initial parser used little-endian and fell back to hardcoded mock data — I identified the bug and specified the fix (big-endian detection, no fallbacks)
-- The AI's first stat card choices (file size, total atoms, file format) were wrong scientifically — I replaced them with Depth(Z), m/z Range, and Reconstruction Volume
-- The AI initially made the mass spectrum the centrepiece. I reframed it as supporting evidence for `MaterialIdentification` — the automated "First Look" — which is the actual primary output a researcher needs
-- Tailwind v4 CSS variable syntax (`text-(--var)` not `text-[var(--var)]`) — the AI got this wrong twice; I corrected it
-- Every shadow level, easing curve, and animation duration was specified by me
-
-The AI is fast at scaffolding and syntax. Taste, scientific justification, and interaction hierarchy are not things it produces without direction.
-
----
-
-## What Step 3 Would Look Like
-
-Ranging means assigning definitive element identities to m/z peak ranges. The user draws range brackets on the mass spectrum, assigns each bracket to an element, and the app re-colours the 3D point cloud to match.
-
-The data is already wired for it: `atoms.json` stores the raw m/z value per atom, and the 3D cloud already colours by m/z range. Ranging would replace the hardcoded `mzToRgb` classification with user-defined ranges, re-computing vertex colours on the GPU via a custom Three.js shader.
-
-The `MaterialIdentification` automated identifications would become the starting point for the UI — pre-populated brackets the user can adjust rather than build from scratch.
-
-After ranging: compositional percentages, isotope ratios, proximity histograms, and the data is ready to use as a simulation starting configuration.
+### A Little Bit of Three.js
+I didn't want to get too lost in the weeds of 3D rendering for this `.epos` file, as trying to build a fully optimised renderer could have easily consumed the entire eight hours. But I did want to demonstrate at least some Three.js and WebGL competency, so I included the 3D point cloud on the detail view. It renders a 50k point sample cleanly using a `Float32Array` buffer geometry, keeping it to a single draw call at 60fps.
