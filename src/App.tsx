@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { DatasetsPage } from './pages/DatasetsPage'
 import { DatasetDetailPage } from './pages/DatasetDetailPage'
+import { InvoicePage } from './pages/InvoicePage'
 import { cancelDemoEdge } from './lib/demoEdge'
 
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<DatasetsPage />} />
       <Route path="/dataset/:id" element={<DatasetDetailPage />} />
+      <Route path="/invoice" element={<InvoicePage />} />
     </Routes>
   )
 }
