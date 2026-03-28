@@ -2,8 +2,6 @@
 
 A dataset management and analysis platform for Atom Probe Tomography data, built as a technical test for Atomic Tessellator.
 
----
-
 ## How to Run
 
 ```bash
@@ -14,10 +12,9 @@ pnpm install
 pnpm dev
 ```
 
-Open `http://localhost:5173`.
+Open [http://localhost:5173](http://localhost:5173)
 
-The parsed data files for the provided `epos` file (`public/data/summary.json` and `public/data/atoms.json`) are already committed to the repo. No setup beyond `pnpm install` is needed.
----
+NOTE: The parsed data files for the provided `epos` file (`public/data/summary.json` and `public/data/atoms.json`) are already committed to the repo. No setup beyond `pnpm install` is needed.
 
 ## What is this?
 
@@ -61,8 +58,6 @@ Assuming a successful APT experiment, the main purpose of this screen is to revi
 ### Review and Fail States
 The detail pages for the flagged and failed dataset states show different versions of the above. They specifically call out what the issues with the files are and surface different actions depending on the error.
 
----
-
 ## Behind the Scenes
 
 ### The Python Parser
@@ -88,8 +83,6 @@ I chose to use React over Vue simply because I have more familiarity with it and
 
 ### A Little Bit of Three.js
 I didn't want to get too lost in the weeds of 3D rendering for this `.epos` file, as trying to build a fully optimised renderer could have easily consumed the entire eight hours. But I did want to demonstrate at least some Three.js and WebGL competency, so I included the 3D point cloud on the detail view. It renders a 50k point sample cleanly using a `Float32Array` buffer geometry, keeping it to a single draw call at 60fps.
-
----
 
 ## Thanks for Your Time
 
