@@ -1,0 +1,768 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-16T00:29:03+00:00",
+  "title": "Design System: APT Data Explorer",
+  "extensions": {
+    "colorMeta": {
+      "lit-ground": {
+        "role": "neutral",
+        "displayName": "Lit Ground",
+        "tonalRamp": [
+          "oklch(20.8% 0.042 265.755)",
+          "oklch(27.9% 0.041 260.031)",
+          "oklch(37.2% 0.044 257.287)",
+          "oklch(44.6% 0.043 257.281)",
+          "oklch(55.4% 0.046 257.417)",
+          "oklch(70.4% 0.04 256.788)",
+          "oklch(92.9% 0.013 255.508)",
+          "oklch(98.4% 0.003 247.858)"
+        ]
+      },
+      "panel-white": {
+        "role": "primary",
+        "displayName": "Panel White",
+        "tonalRamp": [
+          "#ffffff"
+        ]
+      },
+      "night-slate": {
+        "role": "primary",
+        "displayName": "Night Slate",
+        "tonalRamp": [
+          "oklch(20.8% 0.042 265.755)",
+          "oklch(27.9% 0.041 260.031)",
+          "oklch(37.2% 0.044 257.287)",
+          "oklch(44.6% 0.043 257.281)",
+          "oklch(55.4% 0.046 257.417)",
+          "oklch(70.4% 0.04 256.788)",
+          "oklch(92.9% 0.013 255.508)",
+          "oklch(98.4% 0.003 247.858)"
+        ]
+      },
+      "rail-glow": {
+        "role": "neutral",
+        "displayName": "Rail Glow",
+        "tonalRamp": [
+          "oklch(20.8% 0.042 265.755)",
+          "oklch(27.9% 0.041 260.031)",
+          "oklch(37.2% 0.044 257.287)",
+          "oklch(44.6% 0.043 257.281)",
+          "oklch(55.4% 0.046 257.417)",
+          "oklch(70.4% 0.04 256.788)",
+          "oklch(92.9% 0.013 255.508)",
+          "oklch(98.4% 0.003 247.858)"
+        ]
+      },
+      "stage-black": {
+        "role": "neutral",
+        "displayName": "Stage Black",
+        "tonalRamp": [
+          "oklch(20.8% 0.042 265.755)",
+          "oklch(27.9% 0.041 260.031)",
+          "oklch(37.2% 0.044 257.287)",
+          "oklch(44.6% 0.043 257.281)",
+          "oklch(55.4% 0.046 257.417)",
+          "oklch(70.4% 0.04 256.788)",
+          "oklch(92.9% 0.013 255.508)",
+          "oklch(98.4% 0.003 247.858)"
+        ]
+      },
+      "action-hover-on-dark": {
+        "role": "primary",
+        "displayName": "Action Hover On Dark",
+        "tonalRamp": [
+          "oklch(20.8% 0.042 265.755)",
+          "oklch(27.9% 0.041 260.031)",
+          "oklch(37.2% 0.044 257.287)",
+          "oklch(44.6% 0.043 257.281)",
+          "oklch(55.4% 0.046 257.417)",
+          "oklch(70.4% 0.04 256.788)",
+          "oklch(92.9% 0.013 255.508)",
+          "oklch(98.4% 0.003 247.858)"
+        ]
+      },
+      "rule-hairline": {
+        "role": "neutral",
+        "displayName": "Rule Hairline",
+        "tonalRamp": [
+          "oklch(20.8% 0.042 265.755)",
+          "oklch(27.9% 0.041 260.031)",
+          "oklch(37.2% 0.044 257.287)",
+          "oklch(44.6% 0.043 257.281)",
+          "oklch(55.4% 0.046 257.417)",
+          "oklch(70.4% 0.04 256.788)",
+          "oklch(92.9% 0.013 255.508)",
+          "oklch(98.4% 0.003 247.858)"
+        ]
+      },
+      "rule-strong": {
+        "role": "neutral",
+        "displayName": "Rule Strong",
+        "tonalRamp": [
+          "oklch(20.8% 0.042 265.755)",
+          "oklch(27.9% 0.041 260.031)",
+          "oklch(37.2% 0.044 257.287)",
+          "oklch(44.6% 0.043 257.281)",
+          "oklch(55.4% 0.046 257.417)",
+          "oklch(70.4% 0.04 256.788)",
+          "oklch(92.9% 0.013 255.508)",
+          "oklch(98.4% 0.003 247.858)"
+        ]
+      },
+      "row-hover": {
+        "role": "neutral",
+        "displayName": "Row Hover",
+        "tonalRamp": [
+          "oklch(20.8% 0.042 265.755)",
+          "oklch(27.9% 0.041 260.031)",
+          "oklch(37.2% 0.044 257.287)",
+          "oklch(44.6% 0.043 257.281)",
+          "oklch(55.4% 0.046 257.417)",
+          "oklch(70.4% 0.04 256.788)",
+          "oklch(92.9% 0.013 255.508)",
+          "oklch(98.4% 0.003 247.858)"
+        ]
+      },
+      "text-muted": {
+        "role": "neutral",
+        "displayName": "Text Muted",
+        "tonalRamp": [
+          "oklch(20.8% 0.042 265.755)",
+          "oklch(27.9% 0.041 260.031)",
+          "oklch(37.2% 0.044 257.287)",
+          "oklch(44.6% 0.043 257.281)",
+          "oklch(55.4% 0.046 257.417)",
+          "oklch(70.4% 0.04 256.788)",
+          "oklch(92.9% 0.013 255.508)",
+          "oklch(98.4% 0.003 247.858)"
+        ]
+      },
+      "text-quiet-on-dark": {
+        "role": "neutral",
+        "displayName": "Text Quiet On Dark",
+        "tonalRamp": [
+          "oklch(20.8% 0.042 265.755)",
+          "oklch(27.9% 0.041 260.031)",
+          "oklch(37.2% 0.044 257.287)",
+          "oklch(44.6% 0.043 257.281)",
+          "oklch(55.4% 0.046 257.417)",
+          "oklch(70.4% 0.04 256.788)",
+          "oklch(92.9% 0.013 255.508)",
+          "oklch(98.4% 0.003 247.858)"
+        ]
+      },
+      "label-on-dark": {
+        "role": "neutral",
+        "displayName": "Label On Dark",
+        "tonalRamp": [
+          "oklch(20.8% 0.042 265.755)",
+          "oklch(27.9% 0.041 260.031)",
+          "oklch(37.2% 0.044 257.287)",
+          "oklch(44.6% 0.043 257.281)",
+          "oklch(55.4% 0.046 257.417)",
+          "oklch(70.4% 0.04 256.788)",
+          "oklch(92.9% 0.013 255.508)",
+          "oklch(98.4% 0.003 247.858)"
+        ]
+      },
+      "border-on-dark": {
+        "role": "neutral",
+        "displayName": "Border On Dark",
+        "tonalRamp": [
+          "oklch(20.8% 0.042 265.755)",
+          "oklch(27.9% 0.041 260.031)",
+          "oklch(37.2% 0.044 257.287)",
+          "oklch(44.6% 0.043 257.281)",
+          "oklch(55.4% 0.046 257.417)",
+          "oklch(70.4% 0.04 256.788)",
+          "oklch(92.9% 0.013 255.508)",
+          "oklch(98.4% 0.003 247.858)"
+        ]
+      },
+      "status-pass": {
+        "role": "tertiary",
+        "displayName": "Pass",
+        "tonalRamp": [
+          "oklch(37.8% 0.077 168.94)",
+          "oklch(43.2% 0.095 166.913)",
+          "oklch(50.8% 0.118 165.612)",
+          "oklch(59.6% 0.145 163.225)",
+          "oklch(69.6% 0.17 162.48)",
+          "oklch(76.5% 0.177 163.223)",
+          "oklch(90.5% 0.093 164.15)",
+          "oklch(97.9% 0.021 166.113)"
+        ]
+      },
+      "status-pass-on-dark": {
+        "role": "tertiary",
+        "displayName": "Pass On Dark",
+        "tonalRamp": [
+          "oklch(37.8% 0.077 168.94)",
+          "oklch(43.2% 0.095 166.913)",
+          "oklch(50.8% 0.118 165.612)",
+          "oklch(59.6% 0.145 163.225)",
+          "oklch(69.6% 0.17 162.48)",
+          "oklch(76.5% 0.177 163.223)",
+          "oklch(90.5% 0.093 164.15)",
+          "oklch(97.9% 0.021 166.113)"
+        ]
+      },
+      "status-flag": {
+        "role": "tertiary",
+        "displayName": "Flag",
+        "tonalRamp": [
+          "oklch(41.4% 0.112 45.904)",
+          "oklch(47.3% 0.137 46.201)",
+          "oklch(55.5% 0.163 48.998)",
+          "oklch(66.6% 0.179 58.318)",
+          "oklch(76.9% 0.188 70.08)",
+          "oklch(82.8% 0.189 84.429)",
+          "oklch(92.4% 0.12 95.746)",
+          "oklch(98.7% 0.022 95.277)"
+        ]
+      },
+      "status-flag-on-dark": {
+        "role": "tertiary",
+        "displayName": "Flag On Dark",
+        "tonalRamp": [
+          "oklch(41.4% 0.112 45.904)",
+          "oklch(47.3% 0.137 46.201)",
+          "oklch(55.5% 0.163 48.998)",
+          "oklch(66.6% 0.179 58.318)",
+          "oklch(76.9% 0.188 70.08)",
+          "oklch(82.8% 0.189 84.429)",
+          "oklch(92.4% 0.12 95.746)",
+          "oklch(98.7% 0.022 95.277)"
+        ]
+      },
+      "flag-band": {
+        "role": "tertiary",
+        "displayName": "Flag Band",
+        "tonalRamp": [
+          "oklch(41.4% 0.112 45.904)",
+          "oklch(47.3% 0.137 46.201)",
+          "oklch(55.5% 0.163 48.998)",
+          "oklch(66.6% 0.179 58.318)",
+          "oklch(76.9% 0.188 70.08)",
+          "oklch(82.8% 0.189 84.429)",
+          "oklch(92.4% 0.12 95.746)",
+          "oklch(98.7% 0.022 95.277)"
+        ]
+      },
+      "status-fail": {
+        "role": "tertiary",
+        "displayName": "Fail",
+        "tonalRamp": [
+          "oklch(39.6% 0.141 25.723)",
+          "oklch(44.4% 0.177 26.899)",
+          "oklch(50.5% 0.213 27.518)",
+          "oklch(57.7% 0.245 27.325)",
+          "oklch(63.7% 0.237 25.331)",
+          "oklch(70.4% 0.191 22.216)",
+          "oklch(88.5% 0.062 18.334)",
+          "oklch(97.1% 0.013 17.38)"
+        ]
+      },
+      "status-fail-on-dark": {
+        "role": "tertiary",
+        "displayName": "Fail On Dark",
+        "tonalRamp": [
+          "oklch(39.6% 0.141 25.723)",
+          "oklch(44.4% 0.177 26.899)",
+          "oklch(50.5% 0.213 27.518)",
+          "oklch(57.7% 0.245 27.325)",
+          "oklch(63.7% 0.237 25.331)",
+          "oklch(70.4% 0.191 22.216)",
+          "oklch(88.5% 0.062 18.334)",
+          "oklch(97.1% 0.013 17.38)"
+        ]
+      },
+      "status-fail-ink": {
+        "role": "tertiary",
+        "displayName": "Fail Ink",
+        "tonalRamp": [
+          "oklch(39.6% 0.141 25.723)",
+          "oklch(44.4% 0.177 26.899)",
+          "oklch(50.5% 0.213 27.518)",
+          "oklch(57.7% 0.245 27.325)",
+          "oklch(63.7% 0.237 25.331)",
+          "oklch(70.4% 0.191 22.216)",
+          "oklch(88.5% 0.062 18.334)",
+          "oklch(97.1% 0.013 17.38)"
+        ]
+      },
+      "status-fail-wash": {
+        "role": "tertiary",
+        "displayName": "Fail Wash",
+        "tonalRamp": [
+          "oklch(39.6% 0.141 25.723)",
+          "oklch(44.4% 0.177 26.899)",
+          "oklch(50.5% 0.213 27.518)",
+          "oklch(57.7% 0.245 27.325)",
+          "oklch(63.7% 0.237 25.331)",
+          "oklch(70.4% 0.191 22.216)",
+          "oklch(88.5% 0.062 18.334)",
+          "oklch(97.1% 0.013 17.38)"
+        ]
+      },
+      "status-pending": {
+        "role": "tertiary",
+        "displayName": "Pending",
+        "tonalRamp": [
+          "oklch(20.8% 0.042 265.755)",
+          "oklch(27.9% 0.041 260.031)",
+          "oklch(37.2% 0.044 257.287)",
+          "oklch(44.6% 0.043 257.281)",
+          "oklch(55.4% 0.046 257.417)",
+          "oklch(70.4% 0.04 256.788)",
+          "oklch(92.9% 0.013 255.508)",
+          "oklch(98.4% 0.003 247.858)"
+        ]
+      },
+      "species-fe2": {
+        "role": "secondary",
+        "displayName": "Iron Fe2+",
+        "tonalRamp": [
+          "oklch(37.9% 0.146 265.522)",
+          "oklch(42.4% 0.199 265.638)",
+          "oklch(48.8% 0.243 264.376)",
+          "oklch(54.6% 0.245 262.881)",
+          "oklch(62.3% 0.214 259.815)",
+          "oklch(70.7% 0.165 254.624)",
+          "oklch(88.2% 0.059 254.128)",
+          "oklch(97% 0.014 254.604)"
+        ]
+      },
+      "species-fe2-on-dark": {
+        "role": "secondary",
+        "displayName": "Iron Fe2+ on dark",
+        "tonalRamp": [
+          "oklch(37.9% 0.146 265.522)",
+          "oklch(42.4% 0.199 265.638)",
+          "oklch(48.8% 0.243 264.376)",
+          "oklch(54.6% 0.245 262.881)",
+          "oklch(62.3% 0.214 259.815)",
+          "oklch(70.7% 0.165 254.624)",
+          "oklch(88.2% 0.059 254.128)",
+          "oklch(97% 0.014 254.604)"
+        ]
+      },
+      "species-fe1": {
+        "role": "secondary",
+        "displayName": "Iron Fe+",
+        "tonalRamp": [
+          "oklch(37.9% 0.146 265.522)",
+          "oklch(42.4% 0.199 265.638)",
+          "oklch(48.8% 0.243 264.376)",
+          "oklch(54.6% 0.245 262.881)",
+          "oklch(62.3% 0.214 259.815)",
+          "oklch(70.7% 0.165 254.624)",
+          "oklch(88.2% 0.059 254.128)",
+          "oklch(97% 0.014 254.604)"
+        ]
+      },
+      "species-fe1-on-dark": {
+        "role": "secondary",
+        "displayName": "Iron Fe+ on dark",
+        "tonalRamp": [
+          "oklch(37.9% 0.146 265.522)",
+          "oklch(42.4% 0.199 265.638)",
+          "oklch(48.8% 0.243 264.376)",
+          "oklch(54.6% 0.245 262.881)",
+          "oklch(62.3% 0.214 259.815)",
+          "oklch(70.7% 0.165 254.624)",
+          "oklch(88.2% 0.059 254.128)",
+          "oklch(97% 0.014 254.604)"
+        ]
+      },
+      "species-ni2": {
+        "role": "secondary",
+        "displayName": "Nickel Ni2+",
+        "tonalRamp": [
+          "oklch(40.8% 0.153 2.432)",
+          "oklch(45.9% 0.187 3.815)",
+          "oklch(52.5% 0.223 3.958)",
+          "oklch(59.2% 0.249 0.584)",
+          "oklch(65.6% 0.241 354.308)",
+          "oklch(71.8% 0.202 349.761)",
+          "oklch(89.9% 0.061 343.231)",
+          "oklch(97.1% 0.014 343.198)"
+        ]
+      },
+      "species-ni2-on-dark": {
+        "role": "secondary",
+        "displayName": "Nickel Ni2+ on dark",
+        "tonalRamp": [
+          "oklch(40.8% 0.153 2.432)",
+          "oklch(45.9% 0.187 3.815)",
+          "oklch(52.5% 0.223 3.958)",
+          "oklch(59.2% 0.249 0.584)",
+          "oklch(65.6% 0.241 354.308)",
+          "oklch(71.8% 0.202 349.761)",
+          "oklch(89.9% 0.061 343.231)",
+          "oklch(97.1% 0.014 343.198)"
+        ]
+      },
+      "species-ni1": {
+        "role": "secondary",
+        "displayName": "Nickel Ni+",
+        "tonalRamp": [
+          "oklch(40.8% 0.153 2.432)",
+          "oklch(45.9% 0.187 3.815)",
+          "oklch(52.5% 0.223 3.958)",
+          "oklch(59.2% 0.249 0.584)",
+          "oklch(65.6% 0.241 354.308)",
+          "oklch(71.8% 0.202 349.761)",
+          "oklch(89.9% 0.061 343.231)",
+          "oklch(97.1% 0.014 343.198)"
+        ]
+      },
+      "species-ni1-on-dark": {
+        "role": "secondary",
+        "displayName": "Nickel Ni+ on dark",
+        "tonalRamp": [
+          "oklch(40.8% 0.153 2.432)",
+          "oklch(45.9% 0.187 3.815)",
+          "oklch(52.5% 0.223 3.958)",
+          "oklch(59.2% 0.249 0.584)",
+          "oklch(65.6% 0.241 354.308)",
+          "oklch(71.8% 0.202 349.761)",
+          "oklch(89.9% 0.061 343.231)",
+          "oklch(97.1% 0.014 343.198)"
+        ]
+      },
+      "species-o1": {
+        "role": "secondary",
+        "displayName": "Oxygen O+",
+        "tonalRamp": [
+          "oklch(39.8% 0.07 227.392)",
+          "oklch(45% 0.085 224.283)",
+          "oklch(52% 0.105 223.128)",
+          "oklch(60.9% 0.126 221.723)",
+          "oklch(71.5% 0.143 215.221)",
+          "oklch(78.9% 0.154 211.53)",
+          "oklch(91.7% 0.08 205.041)",
+          "oklch(98.4% 0.019 200.873)"
+        ]
+      },
+      "species-o1-on-dark": {
+        "role": "secondary",
+        "displayName": "Oxygen O+ on dark",
+        "tonalRamp": [
+          "oklch(39.8% 0.07 227.392)",
+          "oklch(45% 0.085 224.283)",
+          "oklch(52% 0.105 223.128)",
+          "oklch(60.9% 0.126 221.723)",
+          "oklch(71.5% 0.143 215.221)",
+          "oklch(78.9% 0.154 211.53)",
+          "oklch(91.7% 0.08 205.041)",
+          "oklch(98.4% 0.019 200.873)"
+        ]
+      },
+      "species-unidentified": {
+        "role": "secondary",
+        "displayName": "Unidentified",
+        "tonalRamp": [
+          "oklch(40.5% 0.101 131.063)",
+          "oklch(45.3% 0.124 130.933)",
+          "oklch(53.2% 0.157 131.589)",
+          "oklch(64.8% 0.2 131.684)",
+          "oklch(76.8% 0.233 130.85)",
+          "oklch(84.1% 0.238 128.85)",
+          "oklch(93.8% 0.127 124.321)",
+          "oklch(98.6% 0.031 120.757)"
+        ]
+      },
+      "species-unidentified-on-dark": {
+        "role": "secondary",
+        "displayName": "Unidentified on dark",
+        "tonalRamp": [
+          "oklch(40.5% 0.101 131.063)",
+          "oklch(45.3% 0.124 130.933)",
+          "oklch(53.2% 0.157 131.589)",
+          "oklch(64.8% 0.2 131.684)",
+          "oklch(76.8% 0.233 130.85)",
+          "oklch(84.1% 0.238 128.85)",
+          "oklch(93.8% 0.127 124.321)",
+          "oklch(98.6% 0.031 120.757)"
+        ]
+      },
+      "species-unranged": {
+        "role": "secondary",
+        "displayName": "Unranged",
+        "tonalRamp": [
+          "oklch(20.8% 0.042 265.755)",
+          "oklch(27.9% 0.041 260.031)",
+          "oklch(37.2% 0.044 257.287)",
+          "oklch(44.6% 0.043 257.281)",
+          "oklch(55.4% 0.046 257.417)",
+          "oklch(70.4% 0.04 256.788)",
+          "oklch(92.9% 0.013 255.508)",
+          "oklch(98.4% 0.003 247.858)"
+        ]
+      },
+      "species-unranged-on-dark": {
+        "role": "secondary",
+        "displayName": "Unranged on dark",
+        "tonalRamp": [
+          "oklch(20.8% 0.042 265.755)",
+          "oklch(27.9% 0.041 260.031)",
+          "oklch(37.2% 0.044 257.287)",
+          "oklch(44.6% 0.043 257.281)",
+          "oklch(55.4% 0.046 257.417)",
+          "oklch(70.4% 0.04 256.788)",
+          "oklch(92.9% 0.013 255.508)",
+          "oklch(98.4% 0.003 247.858)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Rail verdict title and list page heading. One per screen."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Standalone message panels."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Panel headings, upload prompt, product name."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "The rail cause sentence under the verdict."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running copy, facts and check values; names, chips and status labels step up to 700."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Table column headers and segmented options, sentence case."
+      },
+      "numeric": {
+        "displayName": "Numeric",
+        "purpose": "Column numbers, file names, tooltip readouts, canvas axis ticks."
+      }
+    },
+    "shadows": [
+      {
+        "name": "panel",
+        "value": "0 1px 1px oklch(20.8% 0.042 265.755 / 0.07), 0 2px 6px oklch(20.8% 0.042 265.755 / 0.06), 0 12px 32px oklch(20.8% 0.042 265.755 / 0.06)",
+        "purpose": "Resting elevation for workbench panels, the dataset table and the flag note."
+      },
+      {
+        "name": "raised",
+        "value": "0 1px 1px oklch(20.8% 0.042 265.755 / 0.08), 0 4px 10px oklch(20.8% 0.042 265.755 / 0.08), 0 20px 44px oklch(20.8% 0.042 265.755 / 0.1)",
+        "purpose": "Interactive or floating surfaces: upload zone on hover or drag, toast."
+      },
+      {
+        "name": "primary-action",
+        "value": "inset 0 1px 0 oklch(100% 0 0 / 0.18), 0 6px 18px oklch(12.9% 0.042 264.695 / 0.45)",
+        "purpose": "Rail primary button: top-edge highlight plus deep drop on the dark rail."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-quart",
+        "value": "cubic-bezier(0.25, 1, 0.5, 1)",
+        "purpose": "The only easing curve for transitions and the selection tween."
+      },
+      {
+        "name": "lift",
+        "value": "translateY(-1px); 350ms movement, 200ms colour, 100ms on press",
+        "purpose": "Hover and press on every button and chip."
+      },
+      {
+        "name": "rise",
+        "value": "opacity 0 and translateY(12px) to rest, 480ms, delay 60ms + 45ms per index",
+        "purpose": "Single authored entrance for rail checks and table rows."
+      },
+      {
+        "name": "selection-tween",
+        "value": "350ms ease-out-quart, JS-interpolated",
+        "purpose": "Linked species lighting across canvas, table and WebGL. Instant under reduced motion."
+      },
+      {
+        "name": "pulse-soft",
+        "value": "opacity 1 to 0.45, 1.6s ease-in-out infinite",
+        "purpose": "Pending icon and processing placeholders."
+      },
+      {
+        "name": "float",
+        "value": "translateY(-6px), 1.6s (0.7s while dragging) ease-in-out infinite",
+        "purpose": "Upload icon on hover and drag."
+      },
+      {
+        "name": "shake",
+        "value": "zone 480ms, icon 560ms, decaying, ease-out-quart",
+        "purpose": "Upload rejection. No overshoot."
+      },
+      {
+        "name": "toast",
+        "value": "240ms ease-out-quart, rise 16px, hold 3s",
+        "purpose": "Demo edge toast."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Action On Dark",
+      "kind": "button",
+      "refersTo": "button-primary-on-dark",
+      "description": "Ink action: the one action that fits the status, white on the dark rail.",
+      "html": "<div class=\"ds-rail-foot\"><button class=\"ds-btn-primary\" type=\"button\">Trim surface layer <svg width=\"18\" height=\"18\" viewBox=\"0 0 16 16\" fill=\"none\" aria-hidden=\"true\"><path d=\"M3 8h9M8.5 4L12.5 8l-4 4\" stroke=\"currentColor\" stroke-width=\"1.75\"/></svg></button></div>",
+      "css": ".ds-rail-foot { background: oklch(20.8% 0.042 265.755); padding: 24px; width: 24rem; } .ds-btn-primary { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 12px; border: 0; border-radius: 0; background: #fff; color: oklch(12.9% 0.042 264.695); padding: 14px 20px; font: 700 1rem/1.5 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; text-align: left; cursor: pointer; box-shadow: inset 0 1px 0 oklch(100% 0 0 / 0.18), 0 6px 18px oklch(12.9% 0.042 264.695 / 0.45); transition: transform 350ms cubic-bezier(0.25, 1, 0.5, 1), box-shadow 350ms cubic-bezier(0.25, 1, 0.5, 1), background-color 200ms cubic-bezier(0.25, 1, 0.5, 1), border-color 200ms cubic-bezier(0.25, 1, 0.5, 1), color 200ms cubic-bezier(0.25, 1, 0.5, 1); } .ds-btn-primary:hover { background: oklch(92.9% 0.013 255.508); transform: translateY(-1px); } .ds-btn-primary:active { transform: translateY(0); transition-duration: 100ms; } .ds-btn-primary:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Action On Dark",
+      "kind": "button",
+      "refersTo": "button-secondary-on-dark",
+      "description": "Optional second action in the rail, outlined and quiet.",
+      "html": "<div class=\"ds-rail-foot2\"><button class=\"ds-btn-secondary\" type=\"button\">Compare to a simulation</button></div>",
+      "css": ".ds-rail-foot2 { background: oklch(20.8% 0.042 265.755); padding: 24px; width: 24rem; } .ds-btn-secondary { width: 100%; border: 1px solid oklch(44.6% 0.043 257.281); border-radius: 0; background: transparent; color: oklch(96.8% 0.007 247.896); padding: 12px 20px; font: 500 1rem/1.5 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; text-align: left; cursor: pointer; transition: transform 350ms cubic-bezier(0.25, 1, 0.5, 1), box-shadow 350ms cubic-bezier(0.25, 1, 0.5, 1), background-color 200ms cubic-bezier(0.25, 1, 0.5, 1), border-color 200ms cubic-bezier(0.25, 1, 0.5, 1), color 200ms cubic-bezier(0.25, 1, 0.5, 1); } .ds-btn-secondary:hover { border-color: oklch(70.4% 0.04 256.788); background: oklch(27.9% 0.041 260.031); transform: translateY(-1px); } .ds-btn-secondary:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Quiet action on light surfaces, such as Reset view.",
+      "html": "<button class=\"ds-btn-outline\" type=\"button\">Reset view</button>",
+      "css": ".ds-btn-outline { border: 1px solid oklch(86.9% 0.022 252.894); border-radius: 0; background: #fff; color: oklch(20.8% 0.042 265.755); padding: 4px 12px; font: 400 1rem/1.5 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; cursor: pointer; transition: border-color 200ms cubic-bezier(0.25, 1, 0.5, 1); } .ds-btn-outline:hover { border-color: oklch(20.8% 0.042 265.755); } .ds-btn-outline:focus-visible { outline: 2px solid oklch(20.8% 0.042 265.755); outline-offset: 2px; }"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "chip",
+      "refersTo": "segment",
+      "description": "Log and linear scale toggle on the spectrum.",
+      "html": "<div class=\"ds-seg\" role=\"group\" aria-label=\"Y axis scale\"><button class=\"ds-seg-btn\" aria-pressed=\"true\">Log</button><button class=\"ds-seg-btn\" aria-pressed=\"false\">Linear</button></div>",
+      "css": ".ds-seg { display: inline-flex; border: 1px solid oklch(86.9% 0.022 252.894); } .ds-seg-btn { border: 0; border-radius: 0; padding: 6px 14px; font: 500 1rem/1.5 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; background: #fff; color: oklch(37.2% 0.044 257.287); cursor: pointer; transition: background-color 200ms cubic-bezier(0.25, 1, 0.5, 1), color 200ms cubic-bezier(0.25, 1, 0.5, 1); } .ds-seg-btn:hover { background: oklch(96.8% 0.007 247.896); } .ds-seg-btn[aria-pressed=true] { background: oklch(20.8% 0.042 265.755); color: #fff; } .ds-seg-btn:focus-visible { outline: 2px solid oklch(20.8% 0.042 265.755); outline-offset: 2px; }"
+    },
+    {
+      "name": "Species Chip",
+      "kind": "chip",
+      "refersTo": "species-chip",
+      "description": "Selects a species and lights it across spectrum, table and needle.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip\" aria-pressed=\"true\"><span class=\"ds-swatch\" style=\"background:#0092b8\"></span>O\u207a</button><button class=\"ds-chip\" aria-pressed=\"false\"><span class=\"ds-swatch\" style=\"background:#155dfc\"></span>Fe\u00b2\u207a</button><button class=\"ds-chip\" aria-pressed=\"false\"><span class=\"ds-swatch\" style=\"background:#90a1b9\"></span>Rest</button></div>",
+      "css": ".ds-chips { display: flex; gap: 12px; } .ds-chip { display: inline-flex; min-width: 4rem; align-items: center; gap: 8px; border: 2px solid oklch(92.9% 0.013 255.508); border-radius: 0; background: #fff; padding: 2px 8px; font: 700 1rem/1.5 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; color: oklch(20.8% 0.042 265.755); cursor: pointer; transition: transform 350ms cubic-bezier(0.25, 1, 0.5, 1), box-shadow 350ms cubic-bezier(0.25, 1, 0.5, 1), background-color 200ms cubic-bezier(0.25, 1, 0.5, 1), border-color 200ms cubic-bezier(0.25, 1, 0.5, 1), color 200ms cubic-bezier(0.25, 1, 0.5, 1); } .ds-chip:hover { border-color: oklch(70.4% 0.04 256.788); transform: translateY(-1px); } .ds-chip[aria-pressed=true] { border-color: oklch(20.8% 0.042 265.755); } .ds-chip:focus-visible { outline: 2px solid oklch(20.8% 0.042 265.755); outline-offset: 2px; } .ds-swatch { width: 12px; height: 12px; flex-shrink: 0; }"
+    },
+    {
+      "name": "Evidence Panel",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "White workbench panel lifted by the Panel shadow.",
+      "html": "<section class=\"ds-panel\"><h2 class=\"ds-panel-title\">Composition</h2><p class=\"ds-panel-sub\">Share of ions by ranging window.</p><div class=\"ds-row\"><span class=\"ds-sci\">Iron</span><span class=\"ds-num\">175,000</span><span class=\"ds-num ds-b\">15.9%</span></div></section>",
+      "css": ".ds-panel { background: #fff; border-radius: 0; padding: 24px; box-shadow: 0 1px 1px oklch(20.8% 0.042 265.755 / 0.07), 0 2px 6px oklch(20.8% 0.042 265.755 / 0.06), 0 12px 32px oklch(20.8% 0.042 265.755 / 0.06); font: 400 1rem/1.5 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; color: oklch(20.8% 0.042 265.755); max-width: 28rem; } .ds-panel-title { margin: 0; font: 700 1.25rem/1.4 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; } .ds-panel-sub { margin: 4px 0 16px; color: oklch(44.6% 0.043 257.281); } .ds-row { display: flex; gap: 16px; padding: 10px 0; border-top: 1px solid oklch(92.9% 0.013 255.508); } .ds-sci { font-family: 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; font-weight: 700; flex: 1; } .ds-num { font-family: 'Atkinson Hyperlegible Mono', ui-monospace, 'SF Mono', Menlo, monospace; font-variant-numeric: tabular-nums; } .ds-b { font-weight: 700; }"
+    },
+    {
+      "name": "Verdict Rail",
+      "kind": "custom",
+      "refersTo": "verdict-rail",
+      "description": "The signature dark rail: verdict, cause, three checks.",
+      "html": "<aside class=\"ds-rail\"><div class=\"ds-rail-head\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" aria-hidden=\"true\" style=\"color:oklch(76.5% 0.177 163.223)\"><circle cx=\"10\" cy=\"10\" r=\"9\" fill=\"currentColor\"/><path d=\"M6 10.4l2.6 2.6L14 7.6\" stroke=\"white\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"square\"/></svg><h1>Clean acquisition</h1></div><p class=\"ds-lead\">Ready to seed a simulation.</p><ul class=\"ds-checks\"><li><span class=\"ds-check-name\">Acquisition</span><span class=\"ds-check-val\">520,000 ions</span></li><li><span class=\"ds-check-name\">Composition</span><span class=\"ds-check-val\">Fe-Cr Alloy</span></li></ul></aside>",
+      "css": ".ds-rail { width: 24rem; padding: 20px 24px 24px; background: radial-gradient(130% 45% at 0% 0%, oklch(27.9% 0.041 260.031), transparent 75%), oklch(20.8% 0.042 265.755); color: oklch(96.8% 0.007 247.896); font: 400 1rem/1.5 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; } .ds-rail-head { display: flex; align-items: center; gap: 12px; } .ds-rail-head svg { width: 26px; height: 26px; } .ds-rail h1 { margin: 0; font: 700 1.953rem/1.15 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; color: #fff; } .ds-lead { margin: 16px 0 24px; font: 500 1.25rem/1.4 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; color: #fff; } .ds-checks { list-style: none; margin: 0; padding: 0; } .ds-checks li { display: flex; gap: 12px; padding: 10px 0; border-top: 1px solid color-mix(in oklch, oklch(37.2% 0.044 257.287) 70%, transparent); } .ds-check-name { font-weight: 700; color: #fff; } .ds-check-val { margin-left: auto; font-family: 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; color: oklch(86.9% 0.022 252.894); font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Status Badge",
+      "kind": "custom",
+      "refersTo": "status-pass",
+      "description": "Status icon shape, bold label and optional reason.",
+      "html": "<div class=\"ds-badges\"><span class=\"ds-badge\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 20 20\" aria-hidden=\"true\" style=\"color:oklch(59.6% 0.145 163.225)\"><circle cx=\"10\" cy=\"10\" r=\"9\" fill=\"currentColor\"/><path d=\"M6 10.4l2.6 2.6L14 7.6\" stroke=\"white\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"square\"/></svg><b>Clean</b></span><span class=\"ds-badge\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 20 20\" aria-hidden=\"true\" style=\"color:oklch(57.7% 0.245 27.325)\"><rect x=\"1.5\" y=\"1.5\" width=\"17\" height=\"17\" fill=\"currentColor\"/><path d=\"M6.5 6.5l7 7M13.5 6.5l-7 7\" stroke=\"white\" stroke-width=\"2\"/></svg><b>Failed</b><span class=\"ds-reason\">Tip fracture</span></span></div>",
+      "css": ".ds-badges { display: flex; flex-direction: column; gap: 12px; font: 400 1rem/1.5 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; } .ds-badge { display: inline-flex; align-items: center; gap: 8px; color: oklch(20.8% 0.042 265.755); } .ds-reason { color: oklch(44.6% 0.043 257.281); }"
+    },
+    {
+      "name": "Upload Zone",
+      "kind": "input",
+      "refersTo": "upload-zone",
+      "description": "Drag and drop target for .epos files; ink border on hover, red shake on reject.",
+      "html": "<div class=\"ds-upload\" tabindex=\"0\" role=\"button\"><svg class=\"ds-up-icon\" width=\"36\" height=\"36\" viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\"><path d=\"M12 16V4M7 9l5-5 5 5M4 20h16\" stroke=\"currentColor\" stroke-width=\"2\"/></svg><p class=\"ds-up-title\">Drop an .epos file</p><p class=\"ds-up-sub\">or click to browse your files</p></div>",
+      "css": ".ds-upload { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 36px 24px; border: 2px dashed oklch(86.9% 0.022 252.894); border-radius: 0; background: rgb(255 255 255 / 0.7); text-align: center; cursor: pointer; font: 400 1rem/1.5 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; transition: border-color 200ms cubic-bezier(0.25, 1, 0.5, 1), background-color 200ms cubic-bezier(0.25, 1, 0.5, 1), transform 350ms cubic-bezier(0.25, 1, 0.5, 1), box-shadow 350ms cubic-bezier(0.25, 1, 0.5, 1); } .ds-upload:hover, .ds-upload:focus-visible { border-color: oklch(20.8% 0.042 265.755); background: #fff; box-shadow: 0 1px 1px oklch(20.8% 0.042 265.755 / 0.08), 0 4px 10px oklch(20.8% 0.042 265.755 / 0.08), 0 20px 44px oklch(20.8% 0.042 265.755 / 0.1); outline: none; } .ds-up-icon { color: oklch(55.4% 0.046 257.417); } .ds-upload:hover .ds-up-icon { color: oklch(20.8% 0.042 265.755); animation: ds-float 1.6s ease-in-out infinite; } @keyframes ds-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } } .ds-up-title { margin: 0; font: 700 1.25rem/1.4 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif; color: oklch(20.8% 0.042 265.755); } .ds-up-sub { margin: 0; color: oklch(44.6% 0.043 257.281); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Lit Workbench",
+    "overview": "The app is a physical bench under a single overhead light. The ground (`lit-ground`) is brightest where the light lands, a white radial falloff at the top of the page. White evidence panels sit on it, lifted by soft, cool, three-layer shadows. Beside the bench stands a dark verdict rail in `night-slate` that states the result, the cause and the one next action. The only darker surface is the 3D viewport, a `stage-black` box set inside a white panel like any other piece of evidence.\n\nThis is an Operate surface. It is dense but calm, with one hyperlegible typeface, a fixed rem type scale, no fluid type and nothing smaller than 16px. No hue is spent on chrome. Actions are ink: white on the dark rail and header, `night-slate` on light surfaces. Colour means data or status. Each ion species owns a Tailwind hue across every view. Status owns emerald, amber, red and slate, and every status also owns a shape.\n\nMotion is weighted and functional. Things rise into place, lift a pixel on hover and settle fast on press. One easing curve (`ease-out-quart`) runs every transition. The signature behaviour is linked selection lighting: choosing a species in the spectrum, the composition table or the 3D needle keeps it in its colour in all three while the rest recedes.",
+    "keyCharacteristics": [
+      "Dark verdict rail beside a light workbench, the same layout for every status.",
+      "Square corners everywhere, zero radius, no chamfer.",
+      "Depth from overhead light: radial ground, cool layered shadows, a 1px lift on hover.",
+      "Ink actions; hue is reserved for species and status.",
+      "Atkinson Hyperlegible Next throughout, its Mono sibling for anything that aligns."
+    ],
+    "rules": [
+      {
+        "name": "The Ink Acts Rule",
+        "body": "Actions carry no hue. On dark they are white with slate-950 text; on light they are slate-900. Colour belongs to data and status.",
+        "section": "colors"
+      },
+      {
+        "name": "The Species Owns Its Hue Rule",
+        "body": "A species keeps the same hue in every view. Blue, pink, cyan and lime are reserved for species, so no interface element borrows them.",
+        "section": "colors"
+      },
+      {
+        "name": "The Shape Carries Status Rule",
+        "body": "Every status tone has its own icon silhouette (circle, triangle, square, dashed ring, bar). Colour reinforces status; shape states it.",
+        "section": "colors"
+      },
+      {
+        "name": "The Three To One Graphic Rule",
+        "body": "Status icons, flag borders and flag lines reach at least 3:1 against the surface they sit on. That is why the flag is amber-600 on white (about 3.2:1) and amber-400 only on dark, and why pending icons on white are slate-500.",
+        "section": "colors"
+      },
+      {
+        "name": "The Sixteen Pixel Floor Rule",
+        "body": "Nothing renders below 1rem, canvas labels included. Hierarchy comes from weight and the 1.25 step scale, never from shrinking text.",
+        "section": "typography"
+      },
+      {
+        "name": "The Mono Aligns Rule",
+        "body": "Mono is for characters that must line up: column numbers, file names, readouts and axis ticks. Everything else is Atkinson Hyperlegible Next.",
+        "section": "typography"
+      },
+      {
+        "name": "The Overhead Light Rule",
+        "body": "Shadows fall straight down, soft and cool. Elevation rises with interactivity: panels rest, interactive surfaces lift to Raised.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep every corner at 0px.",
+      "Do make actions ink: white with slate-950 text on dark, slate-900 on light.",
+      "Do draw a species in its own hue in every view, base step on white, the brighter `-on-dark` step in the 3D viewport.",
+      "Do pair every status colour with its icon shape (circle, triangle, square, dashed ring, bar).",
+      "Do check every status graphic for 3:1 against its surface; on white the flag is amber-600, never a lighter amber.",
+      "Do set ion counts, shares, file names, readouts and axis ticks in Atkinson Hyperlegible Mono with tabular figures; everything else in Atkinson Hyperlegible Next.",
+      "Do run every transition on `cubic-bezier(0.25, 1, 0.5, 1)`, 350ms for movement, 200ms for colour, 100ms on press.",
+      "Do honour reduced motion: animations and transitions collapse to 1ms and the selection tween swaps instantly.",
+      "Do tint shadows with slate-900, layered contact, mid and ambient."
+    ],
+    "donts": [
+      "Don't set any text below 1rem, on canvas or in HTML.",
+      "Don't spend a hue on chrome; blue, pink, cyan and lime belong to species, emerald, amber and red to status.",
+      "Don't use slate-950 for whole surfaces other than the 3D viewport.",
+      "Don't use pure black shadows or a single blurred shadow.",
+      "Don't use springy or overshooting easing; motion is weighted and settles.",
+      "Don't let a flag note or highlight change plotted values."
+    ]
+  }
+}

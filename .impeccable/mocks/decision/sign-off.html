@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en-AU"><head><meta charset="utf-8"><title>Sign-off sequence</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#202432;--navy-9:#161925;--ground:#f4f5f8;--panel:#fff;--ink:#1b1e29;--ink-2:#4a5063;--line:#dfe2ea;--orange:#f28101;--yellow:#eac904;--red:#e2272f;--green:#2f9e5b;--chamfer:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px))}
+*{box-sizing:border-box;margin:0}
+body{width:1440px;height:900px;overflow:hidden;background:var(--ground);font:500 18px/1.5 Archivo,sans-serif;color:var(--ink)}
+.mono{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
+header{background:var(--navy);color:#e9ebf2;padding:20px 48px 0}
+.top{display:flex;align-items:center;gap:28px}
+.top .crumb{color:#9aa1b6;font-size:16px}.top .crumb b{color:#fff}
+.top .locked{margin-left:auto;background:#343a4d;color:#c3c8d6;font-weight:800;font-size:17px;padding:13px 20px;clip-path:var(--chamfer)}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:20px}
+.seg div{padding:14px 0 16px;font-size:18px;font-weight:700;border-top:4px solid #3a4157;color:#9aa1b6}
+.seg .done{border-color:var(--green);color:#fff}.seg .now{border-color:var(--orange);color:#fff}
+main{padding:36px 48px;display:flex;flex-direction:column;gap:16px}
+.check{background:var(--panel);box-shadow:0 1px 2px rgba(24,30,60,.12),0 8px 24px rgba(24,30,60,.08)}
+.check.open{display:grid;grid-template-columns:420px 1fr;gap:40px;padding:32px 36px}
+.check h2{font-size:28px;font-weight:800;line-height:1.2}
+.check .q{color:var(--ink-2);font-size:17px;margin-top:6px}
+.finding{margin-top:24px;font-size:18px;line-height:1.55;max-width:36ch}
+.big{font-size:44px;font-weight:800;letter-spacing:-.02em;margin-top:22px;line-height:1}
+.big small{display:block;font-size:16px;color:var(--ink-2);font-weight:500;letter-spacing:0;margin-top:8px}
+.acts{display:flex;gap:16px;align-items:center;margin-top:30px}
+.btn{background:var(--orange);color:var(--navy-9);font-weight:800;font-size:18px;padding:14px 22px;clip-path:var(--chamfer)}
+.link{color:var(--ink-2);text-decoration:underline;font-size:16px}
+.ev{position:relative;border-left:1px solid var(--line);padding-left:40px}
+.ev h3{font-size:18px;font-weight:700}
+.trace{position:relative;height:300px;margin-top:20px;border-left:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.trace svg{position:absolute;inset:0}
+.axis{position:absolute;bottom:-28px;font-size:14px;color:var(--ink-2)}
+.check.shut{display:flex;align-items:center;gap:16px;padding:22px 36px;font-size:20px;font-weight:700}
+.check.shut i{width:12px;height:12px;background:var(--green)}
+.check.shut em{font-style:normal;color:var(--ink-2);font-weight:500;font-size:17px}
+.check.shut span{margin-left:auto;color:var(--ink-2);font-size:16px}
+</style></head><body>
+<header>
+<div class="top"><span class="crumb">Datasets / <b>atom_probe_tomography_data-public.epos</b></span><span class="locked">New simulation: sign 3 checks</span></div>
+<div class="seg"><div class="now">1 · Acquisition</div><div>2 · Composition</div><div>3 · Reconstruction</div></div>
+</header>
+<main>
+<section class="check open">
+<div>
+<h2>Did the acquisition work?</h2>
+<p class="q">Automatic finding: yes, full-depth run with no voltage events</p>
+<p class="big mono">6,596,033<small>ions detected across 71.2 nm of depth</small></p>
+<p class="finding">Detection rate stayed steady from first ion to last. No fracture or flashover signature in the voltage curve.</p>
+<div class="acts"><span class="btn">Confirm acquisition</span><span class="link">Flag a problem</span></div>
+</div>
+<div class="ev">
+<h3>Detection rate over the run</h3>
+<div class="trace"><svg viewBox="0 0 800 300" preserveAspectRatio="none"><polyline fill="none" stroke="#202432" stroke-width="3" points="0,210 60,120 120,96 200,92 300,98 400,90 500,95 600,92 700,97 800,94"/><polyline fill="none" stroke="#f28101" stroke-width="3" stroke-dasharray="8 6" points="0,60 800,60"/></svg>
+<span class="axis mono" style="left:0">0 M</span><span class="axis mono" style="left:48%">3.3 M</span><span class="axis mono" style="right:0">6.6 M ions</span></div>
+</div>
+</section>
+<section class="check shut"><i style="background:#9aa1b6"></i>What material is this?<em>Automatic: Fe-Ni alloy, Fe<sup>2+</sup> 61%</em><span>Waiting on check 1</span></section>
+<section class="check shut"><i style="background:#9aa1b6"></i>Is the reconstruction credible?<em>Automatic: needle geometry nominal</em><span>Waiting on check 2</span></section>
+</main>
+</body></html>

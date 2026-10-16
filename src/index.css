@@ -1,181 +1,178 @@
 @import "tailwindcss";
 
-:root {
-  /* - Colour --------------------------- */
-  --bg-base: #141720;
-  --bg-card: #1b1f2e;
-  --bg-card-hi: #222638;
+/* - Theme ----------------------------------------------------------------- */
+/* Colours are Tailwind v4 defaults, used by name in markup. Canvas and WebGL
+ * can't read utility classes, so their copies live in src/lib/palette.ts. */
+@theme {
+  /* Hyperlegible throughout: O and 0, l and 1, rn and m never blur */
+  --font-sans: 'Atkinson Hyperlegible Next', ui-sans-serif, system-ui, sans-serif;
+  /* Numbers that align in columns */
+  --font-mono: 'Atkinson Hyperlegible Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
-  --border-dim: rgba(255, 255, 255, 0.06);
-  --border-hi: rgba(255, 255, 255, 0.12);
+  /* Fixed rem scale, 1.25 ratio. Product UI, so no fluid type. */
+  --text-step-0: 1rem;
+  --text-step-0--line-height: 1.5;
+  --text-step-1: 1.25rem;
+  --text-step-1--line-height: 1.4;
+  --text-step-2: 1.5625rem;
+  --text-step-2--line-height: 1.25;
+  --text-step-3: 1.953rem;
+  --text-step-3--line-height: 1.15;
 
-  --text-primary: #e8eaf0;
-  --text-secondary: #8b929e;
-  --text-dim: #4b5563;
-
-  --accent: #3b82f6;
-
-  --green: #22c55e;
-  --red: #ef4444;
-
-  /* - Typography ------------------------ */
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, 'Cascadia Code', monospace;
-
-  /* - Easing --------------------------------- */
-  /* Objects have mass. They ease out - not linearly. */
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-  /* Spring: overshoots slightly, settles back. Used for physical toggles. */
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-
-  /* - Elevation / Shadow ------------------------ */
-  /*
-   * Level 1: Subtle - stat cards, table rows.
-   * Level 2: Standard - section cards (.card).
-   * Level 3: Elevated - primary CTA, hovered cards (.card-elevated).
-   * btn-primary: Level 3 + accent glow - primary CTA buttons.
-   * row-hover: Top/bottom bevel only - table row hover state.
-   */
-  --shadow-level-1:
-    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
-    0 1px 0 rgba(255, 255, 255, 0.06) inset,
-    0 2px 8px rgba(0, 4, 18, 0.55),
-    0 1px 2px rgba(0, 4, 18, 0.4);
-
-  --shadow-level-2:
-    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
-    0 1px 0 rgba(255, 255, 255, 0.08) inset,
-    0 4px 24px rgba(0, 4, 18, 0.7),
-    0 1px 3px rgba(0, 4, 18, 0.5);
-
-  --shadow-level-3:
-    0 0 0 1px rgba(255, 255, 255, 0.06) inset,
-    0 1px 0 rgba(255, 255, 255, 0.12) inset,
-    0 8px 32px rgba(0, 4, 18, 0.8),
-    0 2px 8px rgba(0, 4, 18, 0.6);
-
-  --shadow-btn-primary:
-    0 8px 32px rgba(59, 130, 246, 0.3),
-    0 2px 8px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-
-  --shadow-row-hover:
-    0 1px 0 rgba(255, 255, 255, 0.13) inset,
-    0 -1px 0 rgba(255, 255, 255, 0.03) inset;
 }
 
-/* - Keyframes --------------------------------- */
-
-/* Content rising into view after data loads */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Each section slides in staggered */
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Bar growing to its target width */
-@keyframes growBar {
-  from { width: 0; }
-  to   { width: var(--bar-width); }
-}
-
-/* Upload zone icon - gentle levitation on hover */
-@keyframes float-upload {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-5px); }
-}
-
-.upload-icon-float {
-  animation: float-upload 1.8s ease-in-out infinite;
-}
-
-/* Upload zone icon - rejection shake */
-@keyframes shake-icon {
-  0%, 100% { transform: translateX(0)    rotate(0deg);  }
-  15%       { transform: translateX(-5px) rotate(-6deg); }
-  30%       { transform: translateX(4px)  rotate(5deg);  }
-  50%       { transform: translateX(-4px) rotate(-4deg); }
-  65%       { transform: translateX(3px)  rotate(2deg);  }
-  80%       { transform: translateX(-2px) rotate(-1deg); }
-}
-
-.upload-icon-shake {
-  animation: shake-icon 0.5s var(--ease-spring) both;
-}
-
-*, *::before, *::after {
-  box-sizing: border-box;
+:root {
+  /* Overhead light, cool shadows. Contact, mid, ambient. */
+  --shadow-panel:
+    0 1px 1px oklch(20.8% 0.042 265.755 / 0.07),
+    0 2px 6px oklch(20.8% 0.042 265.755 / 0.06),
+    0 12px 32px oklch(20.8% 0.042 265.755 / 0.06);
+  --shadow-raised:
+    0 1px 1px oklch(20.8% 0.042 265.755 / 0.08),
+    0 4px 10px oklch(20.8% 0.042 265.755 / 0.08),
+    0 20px 44px oklch(20.8% 0.042 265.755 / 0.1);
 }
 
 html {
-  margin: 0;
-  padding: 0;
   scroll-behavior: smooth;
+  scrollbar-color: var(--color-slate-300) transparent;
 }
 
 body {
   margin: 0;
-  padding: 0;
-  background: var(--bg-base);
-  color: var(--text-primary);
+  /* Overhead light: the ground is brightest where the light lands */
+  background:
+    radial-gradient(120% 55% at 50% -12%, white, transparent 70%) no-repeat,
+    var(--color-slate-50);
+  color: var(--color-slate-900);
   font-family: var(--font-sans);
+  font-size: var(--text-step-0);
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Subtle noise - screens are sterile; physical surfaces aren't */
-  position: relative;
 }
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 200px 200px;
+::selection {
+  background: var(--color-slate-200);
+  color: var(--color-slate-950);
 }
 
-#root {
-  min-height: 100vh;
-  position: relative;
-  z-index: 1;
+:focus-visible {
+  outline: 2px solid var(--color-slate-900);
+  outline-offset: 2px;
 }
 
-/* - Card tiers ---------------------------------------- */
+.on-dark :focus-visible {
+  outline-color: white;
+}
 
-.card {
+.panel {
+  background: white;
+  box-shadow: var(--shadow-panel);
+}
+
+/* Weighted, never springy. Exit faster than entrance. */
+.lift {
+  transition:
+    transform 350ms var(--ease-out-quart),
+    box-shadow 350ms var(--ease-out-quart),
+    background-color 200ms var(--ease-out-quart),
+    border-color 200ms var(--ease-out-quart),
+    color 200ms var(--ease-out-quart);
+}
+
+.lift:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.lift:active:not(:disabled) {
+  transform: translateY(0);
+  transition-duration: 100ms;
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.45; }
+}
+
+.pulse-soft {
+  animation: pulse-soft 1.6s ease-in-out infinite;
+}
+
+/* One authored entrance: rows and checks rise in, staggered via --i */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.rise {
+  animation: rise 480ms var(--ease-out-quart) both;
+  animation-delay: calc(var(--i, 0) * 45ms + 60ms);
+}
+
+/* Upload zone icon: hover levitation */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+.float {
+  animation: float var(--float-speed, 1.6s) ease-in-out infinite;
+}
+
+/* Upload zone: rejection, bang bang bang. Heavy, decaying, no overshoot. */
+@keyframes shake-icon {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  12%      { transform: translateX(-9px) rotate(-10deg); }
+  28%      { transform: translateX(8px) rotate(8deg); }
+  44%      { transform: translateX(-6px) rotate(-6deg); }
+  60%      { transform: translateX(4px) rotate(3deg); }
+  76%      { transform: translateX(-2px) rotate(-1deg); }
+}
+
+@keyframes shake-zone {
+  0%, 100% { transform: translateX(0); }
+  15%      { transform: translateX(-5px); }
+  35%      { transform: translateX(4px); }
+  55%      { transform: translateX(-2px); }
+  75%      { transform: translateX(1px); }
+}
+
+.shake-icon {
+  animation: shake-icon 560ms var(--ease-out-quart) both;
+}
+
+.shake-zone {
+  animation: shake-zone 480ms var(--ease-out-quart) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+/* - Legacy: /invoice only ---------------------------------------------------- */
+/* The invoice page is outside the redesign and keeps its original dark look. */
+:root {
+  --bg-base: #141720;
+  --bg-card: #1b1f2e;
+  --border-dim: rgba(255, 255, 255, 0.06);
+  --border-hi: rgba(255, 255, 255, 0.12);
+  --text-primary: #e8eaf0;
+  --text-secondary: #8b929e;
+  --text-dim: #4b5563;
+}
+
+.invoice-root .card {
   background: var(--bg-card);
   border: 1px solid var(--border-dim);
-  box-shadow: var(--shadow-level-2);
   border-radius: 12px;
-  /* Top-bevel: inner face catching overhead light */
-  background-image: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.025) 0px,
-    transparent 48px
-  );
-}
-
-/* Same as .card but shadow-level-3 - for primary CTA footers, modals */
-.card-elevated {
-  background: var(--bg-card);
-  border: 1px solid var(--border-dim);
-  box-shadow: var(--shadow-level-3);
-  border-radius: 12px;
-  background-image: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.035) 0px,
-    transparent 48px
-  );
-}
-
-.section-enter {
-  animation: slideUp 420ms var(--ease-out-quart) both;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 4px 24px rgba(0, 4, 18, 0.7);
 }

@@ -14,27 +14,19 @@ import type { SpectrumBin } from '../fixtures/aptData'
  * the spectrum independently.
  */
 export type DatasetQuality =
-  | { status: 'clean';      detail: string; accentColor: string }
-  | { status: 'flagged';    reason: FlagReason; detail: string; accentColor: string }
-  | { status: 'failed';     detail: string; accentColor: string }
-  | { status: 'processing'; detail: string; accentColor: string }
-  | { status: 'unknown';    detail: string; accentColor: string }
-
-const ACCENT = {
-  clean:      '#22c55e',
-  flagged:    '#f59e0b',
-  failed:     '#ef4444',
-  processing: '#3b82f6',
-  unknown:    '#6b7280',
-}
+  | { status: 'clean';      detail: string }
+  | { status: 'flagged';    reason: FlagReason; detail: string }
+  | { status: 'failed';     detail: string }
+  | { status: 'processing'; detail: string }
+  | { status: 'unknown';    detail: string }
 
 const FLAG_DETAILS: Record<FlagReason, string> = {
   'surface-contamination':
-    'O\u207a is the dominant ion species \u2014 surface oxide from pre-experiment air exposure. Discard the first 3\u20135\u00a0nm of Z depth before ranging.',
+    'O\u207a is the dominant ion species, from surface oxide formed by air exposure before the experiment. Discard the first 3 to 5\u00a0nm of Z depth before ranging.',
   'reconstruction-artefacts':
-    'Asymmetric XY cross-section detected (aspect ratio 1.82). Reconstruction geometry distorted \u2014 likely a phase or grain boundary event. Review field evaporation parameters before ranging.',
+    'Asymmetric XY cross-section detected (aspect ratio 1.82). Reconstruction geometry is distorted, likely from a phase or grain boundary event. Review field evaporation parameters before ranging.',
   'unexpected-peak':
-    'Unidentified cluster at 44\u201346\u00a0Da accounts for 31\u00a0% of total ions. Material identity cannot be automatically assigned. Manual ranging required.',
+    'Unidentified cluster at 44 to 46\u00a0Da accounts for 31\u00a0% of total ions. Material identity cannot be automatically assigned. Manual ranging required.',
 }
 
 /**
@@ -49,16 +41,14 @@ export function computeQuality(dataset: Dataset, spectrum?: SpectrumBin[]): Data
   if (dataset.status === 'processing') {
     return {
       status: 'processing',
-      detail: 'Parsing in progress \u2014 check back shortly.',
-      accentColor: ACCENT.processing,
+      detail: 'Parsing in progress. Check back shortly.'
     }
   }
 
   if (dataset.status === 'failed') {
     return {
       status: 'failed',
-      detail: 'Specimen failure \u2014 only 182\u00a0k ions detected across 8.2\u00a0nm depth. Insufficient for ranging. Re-run required.',
-      accentColor: ACCENT.failed,
+      detail: 'Specimen failure. Only 182\u00a0k ions detected across 8.2\u00a0nm depth. Insufficient for ranging. Re-run required.'
     }
   }
 
@@ -68,19 +58,18 @@ export function computeQuality(dataset: Dataset, spectrum?: SpectrumBin[]): Data
     return {
       status: 'flagged',
       reason: 'reconstruction-artefacts',
-      detail: FLAG_DETAILS['reconstruction-artefacts'],
-      accentColor: ACCENT.flagged,
+      detail: FLAG_DETAILS['reconstruction-artefacts']
     }
   }
 
   const src = spectrum ?? dataset.spectrum
   if (!src.length) {
-    return { status: 'unknown', detail: 'No spectrum data available.', accentColor: ACCENT.unknown }
+    return { status: 'unknown', detail: 'No spectrum data available.'}
   }
 
   const totalCount = src.reduce((s, b) => s + b.count, 0)
   if (totalCount === 0) {
-    return { status: 'unknown', detail: 'Empty spectrum.', accentColor: ACCENT.unknown }
+    return { status: 'unknown', detail: 'Empty spectrum.'}
   }
 
   const oCount   = src.filter(b => b.mz >= 15.5 && b.mz < 16.5).reduce((s, b) => s + b.count, 0)
@@ -91,8 +80,7 @@ export function computeQuality(dataset: Dataset, spectrum?: SpectrumBin[]): Data
     return {
       status: 'flagged',
       reason: 'surface-contamination',
-      detail: FLAG_DETAILS['surface-contamination'],
-      accentColor: ACCENT.flagged,
+      detail: FLAG_DETAILS['surface-contamination']
     }
   }
 
@@ -112,8 +100,7 @@ export function computeQuality(dataset: Dataset, spectrum?: SpectrumBin[]): Data
     return {
       status: 'flagged',
       reason: 'unexpected-peak',
-      detail: FLAG_DETAILS['unexpected-peak'],
-      accentColor: ACCENT.flagged,
+      detail: FLAG_DETAILS['unexpected-peak']
     }
   }
 
@@ -121,14 +108,12 @@ export function computeQuality(dataset: Dataset, spectrum?: SpectrumBin[]): Data
   if (fe2Count / totalCount > 0.1) {
     return {
       status: 'clean',
-      detail: 'Dominant Fe\u00b2\u207a peak \u2014 expected acquisition signature. Element identities auto-assigned.',
-      accentColor: ACCENT.clean,
+      detail: 'Dominant Fe\u00b2\u207a peak, the expected acquisition signature.'
     }
   }
 
   return {
     status: 'unknown',
-    detail: 'Spectrum present but element identity could not be determined automatically.',
-    accentColor: ACCENT.unknown,
+    detail: 'Spectrum present but element identity could not be determined automatically.'
   }
 }

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en-AU"><head><meta charset="utf-8"><title>Flag-led triage</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#202432;--navy-9:#161925;--ground:#f4f5f8;--panel:#fff;--ink:#1b1e29;--ink-2:#4a5063;--line:#dfe2ea;--orange:#f28101;--yellow:#eac904;--yellow-ink:#6b5a00;--red:#e2272f;--green:#2f9e5b;--chamfer:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px))}
+*{box-sizing:border-box;margin:0}
+body{width:1440px;height:900px;overflow:hidden;background:var(--ground);font:500 18px/1.5 Archivo,sans-serif;color:var(--ink)}
+.mono{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
+header{height:72px;background:var(--navy);color:#e9ebf2;display:flex;align-items:center;gap:32px;padding:0 40px}
+header .crumb{color:#9aa1b6;font-size:16px}header .crumb b{color:#fff;font-weight:700}
+header .pill{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700;color:var(--yellow)}
+header .pill i{width:10px;height:10px;background:var(--yellow)}
+main{display:grid;grid-template-columns:1fr 400px;gap:40px;padding:40px}
+.stage{background:var(--panel);box-shadow:0 1px 2px rgba(24,30,60,.12),0 8px 24px rgba(24,30,60,.08);padding:32px 36px 28px;height:520px;position:relative}
+.stage h1{font-size:32px;font-weight:800;line-height:1.15;letter-spacing:-.01em;max-width:24ch}
+.stage .sub{color:var(--ink-2);font-size:18px;margin-top:8px}
+.plot{position:absolute;left:36px;right:36px;bottom:28px;height:320px;border-left:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.bar{position:absolute;bottom:0;width:10px;background:#9aa1b6}
+.bar.hit{background:var(--yellow);width:14px;box-shadow:0 0 0 2px var(--ink)}
+.note{position:absolute;left:150px;top:-6px;border:2px solid var(--orange);padding:10px 14px;background:#fff8ef;font-size:18px;font-weight:700;width:300px}
+.note small{display:block;font-weight:500;color:var(--ink-2);font-size:16px}
+.lead{position:absolute;left:118px;top:40px;width:34px;height:2px;background:var(--orange);transform:rotate(-30deg)}
+.axis{position:absolute;bottom:-30px;font-size:14px;color:var(--ink-2)}
+aside{display:flex;flex-direction:column;gap:24px}
+.fix{background:var(--navy);color:#fff;padding:28px;clip-path:var(--chamfer)}
+.fix h2{font-size:24px;font-weight:800}
+.fix p{color:#c8ccda;font-size:17px;margin:10px 0 22px}
+.btn{display:inline-flex;gap:10px;align-items:center;background:var(--orange);color:var(--navy-9);font-weight:800;font-size:18px;padding:14px 22px;clip-path:var(--chamfer)}
+.btn2{display:block;margin-top:14px;color:#c8ccda;text-decoration:underline;font-size:16px}
+.facts{background:var(--panel);padding:20px 24px;box-shadow:0 1px 2px rgba(24,30,60,.12)}
+.facts div{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:17px}
+.facts div:last-child{border:0}.facts span{color:var(--ink-2)}
+.rest{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.row{background:var(--panel);padding:18px 22px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 2px rgba(24,30,60,.12);font-size:18px;font-weight:700}
+.row i{width:12px;height:12px;flex:none}.row em{margin-left:auto;font-style:normal;color:var(--ink-2);font-weight:500;font-size:16px}
+</style></head><body>
+<header><span class="crumb">Datasets / <b>fe-cr-alloy-run-2.epos</b></span><span class="crumb mono">520,000 ions · Fe-Cr alloy · 24 Mar 2026</span><span class="pill"><i></i>Review required</span></header>
+<main>
+<section class="stage">
+<h1>Surface oxide is masking the alloy signal</h1>
+<p class="sub">O<sup>+</sup> at 16 Da carries 38% of all ions. A clean Fe-Cr acquisition sits under 5%.</p>
+<div class="plot">
+<div class="bar hit" style="left:92px;height:300px"></div>
+<div class="bar" style="left:270px;height:72px"></div>
+<div class="bar" style="left:300px;height:118px"></div>
+<div class="bar" style="left:330px;height:78px"></div>
+<div class="bar" style="left:380px;height:58px"></div>
+<div class="bar" style="left:600px;height:28px"></div>
+<div class="bar" style="left:820px;height:20px"></div>
+<div class="lead"></div>
+<div class="note">O<sup>+</sup> 16.0 Da · 38.1%<small>Expected under 5% for Fe-Cr</small></div>
+<span class="axis mono" style="left:84px">16</span><span class="axis mono" style="left:262px">26</span><span class="axis mono" style="left:300px">28</span><span class="axis mono" style="left:378px">32</span><span class="axis mono" style="left:598px">44</span><span class="axis mono" style="left:812px">56</span><span class="axis mono" style="right:0">m/z (Da)</span>
+</div>
+</section>
+<aside>
+<div class="fix"><h2>Trim the surface layer</h2><p>Drop the first 4 nm of the reconstruction and re-run identification. The alloy bulk below it reads clean.</p><span class="btn">Trim surface layer →</span><span class="btn2">Keep as is and add a note</span></div>
+<div class="facts"><div><span>Depth affected</span><b class="mono">0–4.1 nm</b></div><div><span>Ions after trim</span><b class="mono">≈ 412,000</b></div><div><span>Fe<sup>2+</sup> share after trim</span><b class="mono">≈ 61%</b></div></div>
+</aside>
+<div class="rest">
+<div class="row"><i style="background:var(--green)"></i>Acquisition<em>520,000 ions, full depth</em></div>
+<div class="row"><i style="background:var(--yellow)"></i>Composition<em>O<sup>+</sup> dominant, see above</em></div>
+<div class="row"><i style="background:var(--green)"></i>Reconstruction<em>Needle geometry nominal</em></div>
+</div>
+</main>
+</body></html>

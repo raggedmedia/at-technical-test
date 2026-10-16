@@ -1,0 +1,107 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "clipped-overflow-container",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/flag-led.html"
+        ],
+        "createdAt": "2026-10-15T23:11:42.813Z",
+        "reason": "Claude: decision sketches are fixed 1440x900 frames with body overflow hidden by the sketch spec; no popovers exist"
+      },
+      {
+        "rule": "clipped-overflow-container",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/verdict-rail.html"
+        ],
+        "createdAt": "2026-10-15T23:11:42.840Z",
+        "reason": "Claude: decision sketches are fixed 1440x900 frames with body overflow hidden by the sketch spec; no popovers exist"
+      },
+      {
+        "rule": "clipped-overflow-container",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/sign-off.html"
+        ],
+        "createdAt": "2026-10-15T23:11:42.868Z",
+        "reason": "Claude: decision sketches are fixed 1440x900 frames with body overflow hidden by the sketch spec; no popovers exist"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/sign-off.html"
+        ],
+        "createdAt": "2026-10-15T23:20:26.346Z",
+        "reason": "Claude: throwaway 1440x900 decision sketch, round closed; build will be checked separately"
+      },
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/sign-off.html"
+        ],
+        "createdAt": "2026-10-15T23:20:26.385Z",
+        "reason": "Claude: throwaway 1440x900 decision sketch, round closed; build will be checked separately"
+      },
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/verdict-rail.html"
+        ],
+        "createdAt": "2026-10-15T23:20:26.415Z",
+        "reason": "Claude: throwaway 1440x900 decision sketch, round closed; build will be checked separately"
+      },
+      {
+        "rule": "dark-glow",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/verdict-rail.html"
+        ],
+        "createdAt": "2026-10-15T23:20:26.443Z",
+        "reason": "Claude: throwaway 1440x900 decision sketch, round closed; build will be checked separately"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/flag-led.html"
+        ],
+        "createdAt": "2026-10-16T00:03:56.320Z",
+        "reason": "Claude: spent decision sketch drawn before the user changed fonts; not shipped"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/verdict-rail.html"
+        ],
+        "createdAt": "2026-10-16T00:03:56.355Z",
+        "reason": "Claude: spent decision sketch drawn before the user changed fonts; not shipped"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/sign-off.html"
+        ],
+        "createdAt": "2026-10-16T00:03:56.390Z",
+        "reason": "Claude: spent decision sketch drawn before the user changed fonts; not shipped"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/type-options.html"
+        ],
+        "createdAt": "2026-10-16T00:10:28.901Z",
+        "reason": "Claude: type comparison page shows candidate faces on purpose; not shipped"
+      }
+    ]
+  }
+}

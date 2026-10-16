@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en-AU"><head><meta charset="utf-8"><title>Verdict rail and workbench</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#202432;--navy-9:#161925;--ground:#f4f5f8;--panel:#fff;--ink:#1b1e29;--ink-2:#4a5063;--line:#dfe2ea;--orange:#f28101;--yellow:#eac904;--red:#e2272f;--green:#2f9e5b;--chamfer:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px))}
+*{box-sizing:border-box;margin:0}
+body{width:1440px;height:900px;overflow:hidden;background:var(--ground);font:500 18px/1.5 Archivo,sans-serif;color:var(--ink);display:grid;grid-template-columns:340px 1fr}
+.mono{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
+nav{background:var(--navy);color:#e9ebf2;padding:28px 28px 32px;display:flex;flex-direction:column;gap:28px}
+nav .back{color:#9aa1b6;font-size:16px}
+nav h1{font-size:22px;font-weight:800;line-height:1.25;word-break:break-all}
+.verdict{display:flex;align-items:center;gap:12px;font-size:24px;font-weight:800;color:#fff}
+.verdict i{width:14px;height:14px;background:var(--green)}
+.checks div{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid #343a4d;font-size:18px}
+.checks i{width:10px;height:10px;background:var(--green)}
+.checks em{margin-left:auto;font-style:normal;color:#9aa1b6;font-size:15px}
+.kv div{display:flex;justify-content:space-between;font-size:16px;padding:5px 0}.kv span{color:#9aa1b6}
+.act{margin-top:auto;display:flex;flex-direction:column;gap:12px}
+.btn{background:var(--orange);color:var(--navy-9);font-weight:800;font-size:18px;padding:16px 20px;clip-path:var(--chamfer)}
+.btn2{border:2px solid #4a5168;color:#e9ebf2;font-weight:700;font-size:17px;padding:12px 18px}
+main{padding:32px 40px;display:grid;grid-template-rows:330px 1fr;gap:28px}
+.card{background:var(--panel);box-shadow:0 1px 2px rgba(24,30,60,.12),0 8px 24px rgba(24,30,60,.08);padding:22px 26px;position:relative}
+.card h2{font-size:20px;font-weight:800}
+.card .hint{color:var(--ink-2);font-size:16px}
+.tabs{position:absolute;right:26px;top:20px;display:flex;gap:4px;font-size:15px}.tabs span{padding:6px 12px;border:1px solid var(--line)}.tabs .on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.plot{position:absolute;left:26px;right:26px;bottom:34px;height:220px;border-left:2px solid var(--ink);border-bottom:2px solid var(--ink)}
+.bar{position:absolute;bottom:0;width:9px;background:#9aa1b6}.bar.sel{background:var(--orange);width:13px}
+.axis{position:absolute;bottom:-28px;font-size:14px;color:var(--ink-2)}
+.low{display:grid;grid-template-columns:1.1fr 1fr;gap:28px}
+.needle{background-color:#141724;background-image:radial-gradient(ellipse 60% 50% at 40% 20%,#2e3550 0%,#141724 70%);color:#c8ccda}
+.needle .shape{position:absolute;left:50%;top:70px;transform:translateX(-50%);width:150px;height:300px;border-radius:75px 75px 8px 8px;background:radial-gradient(circle at 50% 30%,rgba(154,161,182,.55) 0 1px,transparent 2px) 0 0/7px 7px;mask:linear-gradient(#000,#000)}
+.needle .lit{position:absolute;left:50%;top:150px;transform:translateX(-50%);width:120px;height:170px;background:radial-gradient(circle,rgba(242,129,1,.95) 0 1.4px,transparent 2px) 0 0/9px 9px}
+.needle h2{color:#fff}.needle .hint{color:#c3c8d6}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:17px}
+td,th{text-align:left;padding:9px 0;border-bottom:1px solid var(--line)}th{color:var(--ink-2);font-weight:500;font-size:15px}
+td.r,th.r{text-align:right}tr.sel td{background:#fff3e3;font-weight:700}
+</style></head><body>
+<nav>
+<span class="back">← All datasets</span>
+<h1>atom_probe_tomography _data-public.epos</h1>
+<div class="verdict"><i></i>Clean acquisition</div>
+<div class="checks">
+<div><i></i>Acquisition<em>6.60 M ions</em></div>
+<div><i></i>Composition<em>Fe-Ni alloy</em></div>
+<div><i></i>Reconstruction<em>Needle nominal</em></div>
+</div>
+<div class="kv"><div><span>m/z range</span><b class="mono">0.05–299.98 Da</b></div><div><span>Volume</span><b class="mono">42.1 × 42.1 × 71.2 nm</b></div><div><span>Uploaded</span><b>24 Mar 2026</b></div></div>
+<div class="act"><span class="btn">New simulation from dataset →</span><span class="btn2">Compare to existing simulation</span></div>
+</nav>
+<main>
+<section class="card">
+<h2>Mass spectrum</h2><p class="hint">Select a peak to light its ions in the reconstruction</p>
+<div class="tabs"><span class="on">Log</span><span>Linear</span></div>
+<div class="plot">
+<div class="bar" style="left:60px;height:40px"></div><div class="bar sel" style="left:240px;height:200px"></div><div class="bar" style="left:262px;height:120px"></div><div class="bar" style="left:330px;height:96px"></div><div class="bar" style="left:520px;height:52px"></div><div class="bar" style="left:540px;height:38px"></div><div class="bar" style="left:700px;height:22px"></div><div class="bar" style="left:880px;height:14px"></div>
+<span class="axis mono" style="left:54px">16</span><span class="axis mono" style="left:232px">28</span><span class="axis mono" style="left:326px">29</span><span class="axis mono" style="left:516px">56</span><span class="axis mono" style="left:696px">58</span><span class="axis mono" style="right:0">m/z (Da)</span>
+</div>
+</section>
+<div class="low">
+<section class="card needle"><h2>Reconstruction</h2><p class="hint">50,000 ion sample · drag to orbit</p><div class="shape"></div><div class="lit"></div></section>
+<section class="card"><h2>Composition</h2>
+<table><tr><th>Ion</th><th class="r">m/z</th><th class="r">Share</th></tr>
+<tr class="sel"><td>Fe<sup>2+</sup></td><td class="r mono">28.0</td><td class="r mono">61.4%</td></tr>
+<tr><td>Ni<sup>2+</sup></td><td class="r mono">29.0</td><td class="r mono">27.9%</td></tr>
+<tr><td>Fe<sup>+</sup></td><td class="r mono">56.0</td><td class="r mono">5.2%</td></tr>
+<tr><td>Ni<sup>+</sup></td><td class="r mono">58.0</td><td class="r mono">3.1%</td></tr>
+<tr><td>Unranged</td><td class="r mono">–</td><td class="r mono">2.4%</td></tr></table>
+</section>
+</div>
+</main>
+</body></html>

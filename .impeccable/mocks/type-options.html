@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interface type options</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;800&family=Atkinson+Hyperlegible+Next:wght@400;700&family=Atkinson+Hyperlegible+Mono:wght@500&family=Geist:wght@400;500;700;800&family=Hanken+Grotesk:wght@400;500;700;800&family=Schibsted+Grotesk:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+body{background:#f8fafc;color:#0f172b;font:16px/1.5 system-ui;padding:32px}
+h1{font:700 1.5rem/1.2 system-ui;margin-bottom:6px}
+.intro{color:#45556c;margin-bottom:28px;max-width:70ch}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(620px,1fr));gap:28px}
+.opt{background:#fff;box-shadow:0 1px 1px #0f172b12,0 12px 32px #0f172b10}
+.opt>header{display:flex;justify-content:space-between;align-items:baseline;padding:14px 20px;border-bottom:1px solid #e2e8f0;font-family:system-ui}
+.opt>header b{font-size:1.1rem}.opt>header span{color:#45556c}
+.body{display:grid;grid-template-columns:300px 1fr}
+.rail{background:#0f172b;color:#e2e8f0;padding:22px 22px 24px}
+.rail h2{font-size:1.953rem;line-height:1.15;font-weight:700;color:#fff;display:flex;gap:10px;align-items:center}
+.dot{width:22px;height:22px;border-radius:50%;background:#00d492;flex:none}
+.sum{font-size:1.25rem;font-weight:500;color:#fff;margin-top:12px;line-height:1.35}
+.det{color:#cad5e2;margin-top:6px}
+.checks{margin-top:18px}
+.checks div{display:flex;gap:10px;border-top:1px solid #314158b0;padding:9px 0}
+.checks i{width:16px;height:16px;border-radius:50%;background:#00d492;flex:none;margin-top:4px}
+.checks b{color:#fff}.checks em{margin-left:auto;font-style:normal;color:#cad5e2}
+.btn{margin-top:20px;background:#fff;color:#020618;font-weight:700;padding:13px 18px;display:flex;justify-content:space-between}
+.panel{padding:22px 24px}
+.panel h3{font-size:1.25rem;font-weight:700}
+.panel p.s{color:#45556c;margin:2px 0 14px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-weight:500;color:#45556c;padding:6px 0;border-bottom:1px solid #cad5e2}
+td{padding:8px 0;border-bottom:1px solid #e2e8f0;vertical-align:top}
+td small{display:block;color:#45556c;font-size:1rem}
+.r{text-align:right}
+.chip{display:inline-flex;gap:6px;align-items:center;border:2px solid #e2e8f0;padding:0 6px;font-weight:700}
+.chip i{width:11px;height:11px;display:inline-block}
+.sci{font-family:'Atkinson Hyperlegible Next',sans-serif}
+.num{font-family:'Atkinson Hyperlegible Mono',monospace}
+</style></head><body>
+<h1>Interface type options</h1>
+<p class="intro">Same content in four interface faces. Scientific terms and values stay in Atkinson Hyperlegible in every option, so only the interface voice changes. Primary button is now ink, not violet.</p>
+<div class="grid">
+<!--OPTIONS-->
+</div>
+<script>
+const faces = [
+  ['Schibsted Grotesk', 'Current. Editorial grotesque, sharp a and g, the most character.'],
+  ['Hanken Grotesk', 'Quiet neutral grotesque. Steps back and lets the data talk.'],
+  ['Archivo', 'Industrial grotesque from your toys shortlist. Heavier, built feel.'],
+  ['Geist', 'Precise, technical, tight. Closest to a lab-instrument UI, also very current.'],
+]
+const tpl = (face, note) => `
+<section class="opt" style="font-family:'${face}',sans-serif">
+  <header><b>${face}</b><span>${note}</span></header>
+  <div class="body">
+    <div class="rail">
+      <h2><span class="dot"></span>Clean acquisition</h2>
+      <p class="sum">Ready to seed a simulation.</p>
+      <p class="det">Dominant Fe²⁺ peak, the expected acquisition signature.</p>
+      <div class="checks">
+        <div><i></i><b>Acquisition</b><em class="sci">6,596,033 ions</em></div>
+        <div><i></i><b>Composition</b><em class="sci">Fe-Ni Alloy</em></div>
+        <div><i></i><b>Reconstruction</b><em>No artefacts flagged</em></div>
+      </div>
+      <div class="btn">New simulation from dataset <span>→</span></div>
+    </div>
+    <div class="panel">
+      <h3>Composition</h3><p class="s">Share of ions by ranging window.</p>
+      <table><tr><th>Ion</th><th>Element</th><th class="r">Ions</th><th class="r">Share</th></tr>
+      <tr><td><span class="chip sci"><i style="background:#155dfc"></i>Fe²⁺</span></td><td><b>Iron</b><small class="sci">Matrix element</small></td><td class="r num">2,546,525</td><td class="r num"><b>39.5%</b></td></tr>
+      <tr><td><span class="chip sci"><i style="background:#e60076"></i>Ni²⁺</span></td><td><b>Nickel</b><small class="sci">Alloying element</small></td><td class="r num">1,049,692</td><td class="r num"><b>16.3%</b></td></tr>
+      <tr><td><span class="chip sci"><i style="background:#0092b8"></i>O⁺</span></td><td><b>Oxygen</b><small class="sci">Surface oxide or vacuum residual</small></td><td class="r num">813,070</td><td class="r num"><b>12.6%</b></td></tr>
+      </table>
+    </div>
+  </div>
+</section>`
+document.querySelector('.grid').innerHTML = faces.map(f => tpl(...f)).join('')
+</script>
+</body></html>

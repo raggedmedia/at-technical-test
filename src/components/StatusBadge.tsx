@@ -1,76 +1,44 @@
-import type { DatasetStatus, FlagReason, FailReason } from '../fixtures/datasets'
+import type { FlagReason, FailReason } from '../fixtures/datasets'
+import type { DatasetQuality } from '../lib/quality'
+import type { Tone } from '../lib/verdict'
+import { StatusIcon } from './StatusIcon'
 
-// Shared status badge — used on both the datasets list and the dataset detail nav.
-// Whole chip pulses for 'processing'. Flag reason appended inline when supplied.
-
-const STATUS_ACCENT: Record<DatasetStatus, string> = {
-  processed:  '#22c55e',
-  processing: '#3b82f6',
-  flagged:    '#f59e0b',
-  failed:     '#ef4444',
+const TONE: Record<DatasetQuality['status'], { tone: Tone; label: string }> = {
+  clean:      { tone: 'pass',    label: 'Clean' },
+  flagged:    { tone: 'flag',    label: 'Review' },
+  failed:     { tone: 'fail',    label: 'Failed' },
+  processing: { tone: 'pending', label: 'Processing' },
+  unknown:    { tone: 'na',      label: 'Unknown' },
 }
 
-const STATUS_LABELS: Record<DatasetStatus, string> = {
-  processed:  'Processed',
-  processing: 'Processing',
-  flagged:    'Flagged',
-  failed:     'Failed',
-}
-
-const FLAG_REASON_LABELS: Record<FlagReason, string> = {
+const FLAG_REASON: Record<FlagReason, string> = {
   'surface-contamination':    'Surface oxide',
   'reconstruction-artefacts': 'Artefacts',
   'unexpected-peak':          'Unknown peak',
 }
 
-const FAIL_REASON_LABELS: Record<FailReason, string> = {
+const FAIL_REASON: Record<FailReason, string> = {
   'specimen-fracture': 'Tip fracture',
   'voltage-spike':     'Voltage spike',
   'vacuum-loss':       'Vacuum loss',
 }
 
-interface StatusBadgeProps {
-  status: DatasetStatus
-  flagReason?: FlagReason
+interface Props {
+  quality: DatasetQuality
   failReason?: FailReason
-  /** Override the derived accent color (e.g. pass quality.accentColor for consistency). */
-  accentColor?: string
 }
 
-export function StatusBadge({ status, flagReason, failReason, accentColor }: StatusBadgeProps) {
-  const color = accentColor ?? STATUS_ACCENT[status]
-  const isPulsing = status === 'processing'
+export function StatusBadge({ quality, failReason }: Props) {
+  const { tone, label } = TONE[quality.status]
+  const reason = quality.status === 'flagged' ? FLAG_REASON[quality.reason]
+    : quality.status === 'failed' && failReason ? FAIL_REASON[failReason]
+    : null
 
   return (
-    <div className="inline-flex items-center gap-2 shrink-0">
-      <div
-        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium whitespace-nowrap border"
-        style={{
-          background: `${color}18`,
-          borderColor: `${color}38`,
-          color,
-          animation: isPulsing ? 'pulse 1.4s ease-in-out infinite' : undefined,
-        }}
-      >
-        <span
-          className="w-1.5 h-1.5 rounded-full shrink-0"
-          style={{
-            background: color,
-            boxShadow: !isPulsing ? `0 0 5px ${color}` : undefined,
-          }}
-        />
-        {STATUS_LABELS[status]}
-      </div>
-      {flagReason && (
-        <span className="text-[11px] whitespace-nowrap" style={{ color, opacity: 0.75 }}>
-          {FLAG_REASON_LABELS[flagReason]}
-        </span>
-      )}
-      {failReason && (
-        <span className="text-[11px] whitespace-nowrap" style={{ color, opacity: 0.75 }}>
-          {FAIL_REASON_LABELS[failReason]}
-        </span>
-      )}
-    </div>
+    <span className="inline-flex flex-wrap items-center gap-x-2 md:flex-nowrap md:whitespace-nowrap">
+      <StatusIcon tone={tone} size={18} />
+      <span className="font-bold text-slate-900">{label}</span>
+      {reason && <span className="text-slate-600">{reason}</span>}
+    </span>
   )
 }
